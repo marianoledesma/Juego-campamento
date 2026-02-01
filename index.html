@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campamento - Juego de predicciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
+  <style>
+    :root {
+      --atardecer: #e85d04;
+      --atardecer-claro: #ff9f1c;
+      --naranja-cielo: #f4a261;
+      --mar: #0284c7;
+      --mar-claro: #38bdf8;
+      --mar-oscuro: #0369a1;
+      --arena: #fcd34d;
+      --arena-oscura: #f59e0b;
+      --madera: #8b5a2b;
+      --madera-clara: #a67c52;
+      --bambu: #6b4423;
+      --blanco: #fffbeb;
+      --sombra: #0c4a6e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Fredoka', sans-serif;
+      background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 25%, #0284c7 50%, #0369a1 70%, #fcd34d 88%, #fbbf24 95%, #f59e0b 100%);
+      background-size: 100% 400%;
+      animation: bgShift 14s ease-in-out infinite;
+      color: var(--blanco);
+      padding: 1rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+    }
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 0%; }
+      50% { background-position: 0% 55%; }
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 28%;
+      background: linear-gradient(180deg, transparent 0%, rgba(251, 191, 36, 0.4) 40%, rgba(245, 158, 11, 0.6) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23ffffff' fill-opacity='0.06' d='M0 60 Q300 20 600 60 T1200 60 V120 H0 Z'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.04' d='M0 80 Q300 40 600 80 T1200 80 V120 H0 Z'/%3E%3C/svg%3E") repeat-x bottom;
+      background-size: 600px 100px;
+      pointer-events: none;
+      z-index: 0;
+      animation: olas 8s ease-in-out infinite;
+    }
+    @keyframes olas {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-30px); }
+    }
+    .palmeras {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 140px;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(13, 148, 136, 0.12) 40%, transparent 100%);
+      clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+      animation: palmeraFloat 6s ease-in-out infinite;
+    }
+    .palmeras.derecha {
+      right: 0;
+      transform: scaleX(-1);
+      animation: palmeraFloatR 6s ease-in-out infinite 3s;
+    }
+    @keyframes palmeraFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes palmeraFloatR {
+      0%, 100% { transform: translateY(0) scaleX(-1); }
+      50% { transform: translateY(-12px) scaleX(-1); }
+    }
+    .contenedor {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    /* Tamaños grandes para proyección: el público ve desde lejos */
+    .vista-publico .pregunta-actual h2,
+    .pregunta-actual h2 {
+      font-size: clamp(1.8rem, 4.5vw, 2.75rem);
+      line-height: 1.25;
+      margin: 0;
+    }
+    .decoracion-playera {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .emoji-playa {
+      font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+      opacity: 0.95;
+      animation: emojiOnda 3s ease-in-out infinite;
+    }
+    .emoji-playa:nth-child(1) { animation-delay: 0s; }
+    .emoji-playa:nth-child(2) { animation-delay: 0.3s; }
+    .emoji-playa:nth-child(3) { animation-delay: 0.6s; }
+    .emoji-playa:nth-child(4) { animation-delay: 0.9s; }
+    .emoji-playa:nth-child(5) { animation-delay: 1.2s; }
+    @keyframes emojiOnda {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-4px) scale(1.08); }
+    }
+    .marco-emoji {
+      position: absolute;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .marco-emoji-izq {
+      top: 0.5rem;
+      left: 0.6rem;
+      animation: marcoEmojiFloat 2.5s ease-in-out infinite;
+    }
+    .marco-emoji-der {
+      top: 0.5rem;
+      right: 0.6rem;
+      animation: marcoEmojiFloat 2.5s ease-in-out infinite 0.8s;
+    }
+    @keyframes marcoEmojiFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .contenedor h1,
+    .subtitulo,
+    .marco-bambu,
+    .cartel-madera,
+    .cta-revelar-wrap,
+    .decoracion-playera {
+      opacity: 0;
+    }
+    body.entrada-listo .contenedor h1,
+    body.entrada-listo .subtitulo,
+    body.entrada-listo .marco-bambu,
+    body.entrada-listo .cartel-madera,
+    body.entrada-listo .cta-revelar-wrap,
+    body.entrada-listo .decoracion-playera {
+      opacity: 1;
+    }
+    h1 {
+      text-align: center;
+      font-size: clamp(1.6rem, 3.5vw, 2.25rem);
+      text-shadow: 2px 2px 0 var(--sombra);
+      margin-bottom: 0.25rem;
+    }
+    .subtitulo {
+      text-align: center;
+      opacity: 0.95;
+      margin-bottom: 1rem;
+      font-size: clamp(0.85rem, 1.8vw, 1.05rem);
+    }
+    /* Marco tipo tabla de playa / bambú claro */
+    .marco-bambu {
+      position: relative;
+      background: linear-gradient(135deg, #d4a574 0%, #b8956a 40%, #a67c52 100%);
+      border: 5px solid #8b6914;
+      border-radius: 12px;
+      padding: clamp(1rem, 2.5vw, 1.75rem) clamp(1.25rem, 3vw, 2rem) clamp(1rem, 2.5vw, 1.75rem) clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 1.25rem;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2), 0 6px 0 rgba(101, 67, 33, 0.4), 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .marco-bambu {
+      animation: marcoPulse 3s ease-in-out infinite;
+    }
+    @keyframes marcoPulse {
+      0%, 100% { box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2), 0 6px 0 rgba(101,67,33,0.4), 0 8px 20px rgba(0,0,0,0.15); }
+      50% { box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25), 0 6px 0 rgba(101,67,33,0.5), 0 8px 24px rgba(0,0,0,0.2), 0 0 24px rgba(56,189,248,0.15); }
+    }
+    .marco-bambu::before {
+      display: none;
+    }
+    @keyframes signoBounce {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 0.9; }
+    }
+    /* Cartel de madera: predicción en curso */
+    .cartel-madera {
+      background: linear-gradient(180deg, var(--madera-clara) 0%, var(--madera) 30%, #5c3d1e 100%);
+      border: 5px solid #5c3d1e;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 6px 0 rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .cartel-madera::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 12px;
+      background: #5c3d1e;
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .cartel-contenido {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cartel-signo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 3px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--blanco);
+      flex-shrink: 0;
+      animation: cartelPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes cartelPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.3); }
+      50% { transform: scale(1.08); box-shadow: 0 0 20px 4px rgba(255,255,255,0.2); }
+    }
+    .cartel-texto {
+      flex: 1;
+      min-width: 180px;
+    }
+    .cartel-texto .titulo-cartel {
+      margin: 0 0 0.5rem 0;
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+      letter-spacing: 0.02em;
+    }
+    /* Barra tipo tabla de surf */
+    .barra-surf {
+      height: 24px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 0.35rem;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .barra-surf-relleno {
+      height: 100%;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #f59e0b 0%, #fcd34d 30%, #38bdf8 60%, #0ea5e9 100%);
+      background-size: 200% 100%;
+      animation: barraShimmer 2s linear infinite;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 8%;
+    }
+    @keyframes barraShimmer {
+      0% { background-position: 0% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .cartel-texto .probabilidad {
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      opacity: 0.95;
+    }
+    /* Botón REVELAR — CTA principal, aspecto producido */
+    .cta-revelar-wrap {
+      text-align: center;
+      margin: 1.25rem 0 1.5rem;
+    }
+    .cta-revelar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1rem 2.25rem;
+      font-family: inherit;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      background: linear-gradient(135deg, #e85d04 0%, #ff9f1c 40%, #f4a261 70%, #e85d04 100%);
+      background-size: 200% 200%;
+      box-shadow:
+        0 4px 20px rgba(232, 93, 4, 0.5),
+        0 0 0 1px rgba(255,255,255,0.2) inset,
+        0 6px 0 #b84a00;
+      animation: ctaGlow 2.5s ease-in-out infinite, ctaGradient 4s ease infinite;
+    }
+    .cta-revelar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.25) 40%, transparent 60%);
+      transform: translateX(-100%);
+      animation: ctaShimmer 2.5s ease-in-out infinite;
+    }
+    .cta-revelar:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow:
+        0 8px 30px rgba(232, 93, 4, 0.6),
+        0 0 0 1px rgba(255,255,255,0.3) inset,
+        0 8px 0 #b84a00;
+    }
+    .cta-revelar:active {
+      transform: translateY(2px) scale(1);
+      box-shadow:
+        0 2px 12px rgba(232, 93, 4, 0.4),
+        0 0 0 1px rgba(255,255,255,0.15) inset,
+        0 2px 0 #b84a00;
+    }
+    .cta-revelar .cta-icon {
+      font-size: 1.4em;
+      line-height: 1;
+      animation: ctaIconPulse 1.5s ease-in-out infinite;
+    }
+    .cta-revelar .cta-text { position: relative; z-index: 1; }
+    @keyframes ctaGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.08); }
+    }
+    @keyframes ctaGradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    @keyframes ctaShimmer {
+      0% { transform: translateX(-100%); }
+      60%, 100% { transform: translateX(100%); }
+    }
+    @keyframes ctaIconPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.9; }
+    }
+    .cta-revelar-hint {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      opacity: 0.75;
+      letter-spacing: 0.02em;
+    }
+    .selector-pregunta {
+      margin-bottom: 0.75rem;
+    }
+    .selector-pregunta label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .selector-pregunta select {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border-radius: 0.5rem;
+      border: 2px solid var(--madera);
+      background: var(--blanco);
+      color: var(--sombra);
+    }
+    .tipo-respuesta {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      margin-top: 0.2rem;
+    }
+    .equipos-config {
+      margin-bottom: 1.5rem;
+    }
+    .equipos-config h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+    }
+    .equipos-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+    }
+    .input-equipo {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      border-radius: 0.5rem;
+      border: 2px solid var(--mar);
+      background: var(--blanco);
+      color: var(--sombra);
+      font-weight: 600;
+      text-align: center;
+    }
+    .agregar-fila {
+      margin-bottom: 1.5rem;
+    }
+    .agregar-fila h3 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1rem;
+    }
+    .agregar-fila h3 span { color: var(--atardecer-claro); }
+    .inputs-fila {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .input-fila-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .input-fila-item label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+    .input-fila-item input {
+      padding: 0.6rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border-radius: 0.5rem;
+      border: 2px solid var(--mar);
+      background: var(--blanco);
+      color: var(--sombra);
+      text-align: center;
+    }
+    .tabla-predicciones {
+      margin-bottom: 1.5rem;
+    }
+    .tabla-predicciones h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+    }
+    .tabla-wrap {
+      overflow-x: auto;
+    }
+    #tabla-preds {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(0,0,0,0.15);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    #tabla-preds th,
+    #tabla-preds td {
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    #tabla-preds th {
+      background: rgba(0,0,0,0.25);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    #tabla-preds tbody tr:last-child td { border-bottom: none; }
+    #tabla-preds tbody tr:hover { background: rgba(255,255,255,0.05); }
+    #tabla-preds td.ganador {
+      background: var(--atardecer);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1em;
+      position: relative;
+    }
+    #tabla-preds td.ganador::after {
+      content: '🏆';
+      position: absolute;
+      top: 0.2rem;
+      right: 0.2rem;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    #tabla-preds .btn-revelar-fila {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.8rem;
+      font-family: inherit;
+      font-weight: 600;
+      background: var(--mar);
+      color: #fff;
+      border: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #tabla-preds .btn-revelar-fila:hover { background: var(--mar-oscuro); }
+    #tabla-preds .fila-revelada { opacity: 0.85; }
+    #tabla-preds .mensaje-vacio td {
+      text-align: center;
+      opacity: 0.6;
+      font-style: italic;
+    }
+    .btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-2px) scale(1.02); }
+    .btn:active { transform: translateY(0) scale(0.98); }
+    .btn-primario {
+      background: var(--atardecer);
+      color: var(--blanco);
+      box-shadow: 0 3px 0 #c44a00;
+    }
+    .btn-primario:hover { box-shadow: 0 4px 0 #c44a00; }
+    .btn-secundario {
+      background: var(--mar);
+      color: var(--blanco);
+      box-shadow: 0 3px 0 var(--mar-oscuro);
+    }
+    .btn-chico {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.9rem;
+    }
+    .lista-predicciones {
+      margin-bottom: 1.5rem;
+    }
+    .lista-predicciones h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+    .prediccion-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 0.5rem;
+      margin-bottom: 0.35rem;
+      animation: itemEntra 0.4s ease-out backwards;
+    }
+    @keyframes itemEntra {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .prediccion-item .nombre { font-weight: 600; }
+    .prediccion-item .valor { color: var(--atardecer-claro); }
+    .prediccion-item.ganador {
+      background: var(--atardecer);
+      border: 2px solid var(--atardecer-claro);
+      font-size: 1.1rem;
+      animation: ganadorPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes ganadorPop {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      60% { transform: scale(1.04); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .prediccion-item .eliminar {
+      background: transparent;
+      border: none;
+      color: var(--blanco);
+      cursor: pointer;
+      opacity: 0.8;
+      font-size: 1.2rem;
+      padding: 0 0.25rem;
+      line-height: 1;
+    }
+    .prediccion-item .eliminar:hover { opacity: 1; }
+    .revelar-zona {
+      background: rgba(0,0,0,0.2);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .revelar-zona h3 { margin-top: 0; }
+    .revelar-zona h3 code {
+      font-size: 0.95em;
+      background: rgba(255,255,255,0.2);
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+    }
+    .revelar-zona .input-respuesta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .revelar-zona input {
+      padding: 0.6rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border-radius: 0.5rem;
+      border: 2px solid var(--atardecer-claro);
+      background: var(--blanco);
+      color: var(--sombra);
+      min-width: 120px;
+    }
+    .resultado-revelado {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      background: rgba(232, 93, 4, 0.35);
+      border: 2px solid var(--atardecer-claro);
+      animation: resultadoEntra 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes resultadoEntra {
+      from { opacity: 0; transform: scale(0.85) translateY(-10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .resultado-revelado .respuesta-correcta {
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .resultado-revelado .ganador-texto {
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+    }
+    .oculto { display: none !important; }
+    /* Contenedor de confetti/partículas */
+    #confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+    .cartel-madera.revelando {
+      animation: cartelRevela 0.6s ease-out;
+    }
+    @keyframes cartelRevela {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.05); }
+      60% { transform: scale(0.98); }
+      100% { transform: scale(1); }
+    }
+    /* Toast custom estilo playero */
+    .toast-playero {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      z-index: 10000;
+      padding: 0.9rem 1.75rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+      background: linear-gradient(135deg, #e85d04 0%, #ff9f1c 45%, #f4a261 100%);
+      box-shadow:
+        0 4px 20px rgba(232, 93, 4, 0.5),
+        0 0 0 1px rgba(255,255,255,0.25) inset,
+        0 6px 0 rgba(180, 70, 0, 0.5);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .toast-playero.toast-visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast-playero.toast-sale {
+      transform: translateX(-50%) translateY(-80px);
+      opacity: 0;
+    }
+    .toast-playero .toast-icon {
+      margin-right: 0.4rem;
+      font-size: 1.2em;
+    }
+    .mensaje-vacio {
+      color: rgba(254,250,224,0.6);
+      font-style: italic;
+    }
+    /* Panel del operador: se puede ocultar para que el público no vea respuestas */
+    .panel-operador {
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    body.controles-ocultos .panel-operador {
+      display: none;
+    }
+    body.controles-ocultos .selector-pregunta {
+      display: none;
+    }
+    .btn-ocultar-controles {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--blanco);
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-ocultar-controles:hover {
+      background: rgba(0,0,0,0.5);
+      transform: scale(1.02);
+    }
+    body.controles-ocultos .btn-ocultar-controles .texto-visible { display: none; }
+    body.controles-ocultos .btn-ocultar-controles .texto-oculto { display: inline; }
+    .btn-ocultar-controles .texto-oculto { display: none; }
+    .cargar-respuestas-mini {
+      margin-top: 0.4rem;
+      margin-bottom: 0;
+      font-size: 0.8rem;
+      opacity: 0.85;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .link-cargar-respuestas {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      color: var(--blanco);
+      text-decoration: underline;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+    .link-cargar-respuestas:hover { opacity: 1; }
+    .cargar-respuestas-mini .archivo-ok {
+      font-size: 0.85rem;
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+  <div class="palmeras" aria-hidden="true"></div>
+  <div class="palmeras derecha" aria-hidden="true"></div>
+  <div id="confetti-container" aria-hidden="true"></div>
+  <div id="toast-playero" class="toast-playero oculto" role="status" aria-live="polite"></div>
+  <div class="contenedor">
+    <div class="decoracion-playera" aria-hidden="true">
+      <span class="emoji-playa">🌴</span>
+      <span class="emoji-playa">☀️</span>
+      <span class="emoji-playa">🏖️</span>
+      <span class="emoji-playa">🌊</span>
+      <span class="emoji-playa">🦀</span>
+    </div>
+    <h1>🏖️ Predicciones del Campamento</h1>
+    <p class="subtitulo">Juego en vivo — Solo el presentador usa esta pantalla</p>
+
+    <div class="marco-bambu pregunta-actual">
+      <span class="marco-emoji marco-emoji-izq" aria-hidden="true">🌴</span>
+      <span class="marco-emoji marco-emoji-der" aria-hidden="true">☀️</span>
+      <div class="selector-pregunta">
+        <label for="select-pregunta">Elegí la pregunta</label>
+        <select id="select-pregunta">
+          <option value="0">1. Choclo playa</option>
+          <option value="1">2. Remeras campamento</option>
+          <option value="2">3. Distancia a Iglesia</option>
+          <option value="3">4. Mercado Pago</option>
+          <option value="4">5. Camas del predio</option>
+          <option value="5">6. Posteos Instagram</option>
+          <option value="6">7. Hora de la alarma</option>
+        </select>
+        <div class="tipo-respuesta" id="tipo-respuesta">Respuesta: número (ej. 500)</div>
+      </div>
+      <h2 id="texto-pregunta">¿Cuánto sale un choclo de la playa?</h2>
+    </div>
+
+    <div class="cartel-madera" id="cartel-madera">
+      <div class="cartel-contenido">
+        <div class="cartel-signo">?</div>
+        <div class="cartel-texto">
+          <div class="titulo-cartel">PREDICCIÓN EN CURSO...</div>
+          <div class="barra-surf">
+            <div class="barra-surf-relleno" id="barra-surf-relleno" style="width: 75%;"></div>
+          </div>
+          <div class="probabilidad">PROBABILIDAD: <span id="probabilidad-pct">85</span><span id="probabilidad-suffix">% CALCULANDO...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-revelar-wrap">
+      <button type="button" class="btn-ocultar-controles" id="btn-ocultar-controles" aria-label="Ocultar o mostrar controles del operador">
+        <span class="texto-visible">🙈 Ocultar controles</span>
+        <span class="texto-oculto">👁 Mostrar controles</span>
+      </button>
+      <button type="button" class="cta-revelar" id="btn-revelar-cta" aria-label="Revelar respuesta y ver ganador">
+        <span class="cta-icon" aria-hidden="true">✨</span>
+        <span class="cta-text">Revelar</span>
+      </button>
+      <p class="cta-revelar-hint">o presiona <kbd>ESPACIO</kbd></p>
+      <p class="cargar-respuestas-mini">
+        <input type="file" id="input-archivo-respuestas" accept=".json" class="oculto" aria-hidden="true" />
+        <button type="button" class="link-cargar-respuestas" id="btn-cargar-respuestas">Cargar respuestas.json</button>
+        <span class="archivo-ok oculto" id="archivo-ok" aria-live="polite"></span>
+      </p>
+    </div>
+
+    <div class="panel-operador">
+    
+    <div class="equipos-config">
+      <h3>Nombres de los equipos</h3>
+      <div class="equipos-inputs">
+        <input type="text" class="input-equipo" id="equipo-0" placeholder="Equipo 1" value="Equipo 1" />
+        <input type="text" class="input-equipo" id="equipo-1" placeholder="Equipo 2" value="Equipo 2" />
+        <input type="text" class="input-equipo" id="equipo-2" placeholder="Equipo 3" value="Equipo 3" />
+        <input type="text" class="input-equipo" id="equipo-3" placeholder="Equipo 4" value="Equipo 4" />
+        <input type="text" class="input-equipo" id="equipo-4" placeholder="Equipo 5" value="Equipo 5" />
+      </div>
+    </div>
+
+    <div class="agregar-fila">
+      <h3>Agregar predicciones para: <span id="pregunta-agregar">Choclo playa</span></h3>
+      <div class="inputs-fila">
+        <div class="input-fila-item"><label id="label-equipo-0">Equipo 1</label><input type="text" class="input-pred" data-equipo="0" placeholder="500" inputmode="numeric" /></div>
+        <div class="input-fila-item"><label id="label-equipo-1">Equipo 2</label><input type="text" class="input-pred" data-equipo="1" placeholder="500" inputmode="numeric" /></div>
+        <div class="input-fila-item"><label id="label-equipo-2">Equipo 3</label><input type="text" class="input-pred" data-equipo="2" placeholder="500" inputmode="numeric" /></div>
+        <div class="input-fila-item"><label id="label-equipo-3">Equipo 4</label><input type="text" class="input-pred" data-equipo="3" placeholder="500" inputmode="numeric" /></div>
+        <div class="input-fila-item"><label id="label-equipo-4">Equipo 5</label><input type="text" class="input-pred" data-equipo="4" placeholder="500" inputmode="numeric" /></div>
+      </div>
+      <button type="button" class="btn btn-primario" id="btn-agregar-fila">Agregar fila</button>
+    </div>
+
+    <div class="tabla-predicciones">
+      <h3>Tabla de predicciones</h3>
+      <div class="tabla-wrap">
+        <table id="tabla-preds">
+          <thead>
+            <tr>
+              <th>Pregunta</th>
+              <th id="th-equipo-0">Equipo 1</th>
+              <th id="th-equipo-1">Equipo 2</th>
+              <th id="th-equipo-2">Equipo 3</th>
+              <th id="th-equipo-3">Equipo 4</th>
+              <th id="th-equipo-4">Equipo 5</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-preds">
+            <tr class="mensaje-vacio"><td colspan="7">Agregá una fila para empezar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    </div>
+    <div id="resultado" class="resultado-revelado oculto"></div>
+  </div>
+
+  <script>
+    const PREGUNTAS = [
+      { texto: '¿Cuánto sale un choclo de la playa?', tipo: 'numero', placeholder: 'Ej: 500' },
+      { texto: '¿Cuántas remeras trajo … al campamento?', tipo: 'numero', placeholder: 'Ej: 3' },
+      { texto: '¿Cuánta distancia (km) caminando hay del predio a Iglesia del Salvador?', tipo: 'numero', placeholder: 'Ej: 2.5' },
+      { texto: '¿Cuánta plata tiene en Mercado Pago …?', tipo: 'numero', placeholder: 'Ej: 15000' },
+      { texto: '¿Cuántas camas tiene el predio?', tipo: 'numero', placeholder: 'Ej: 20' },
+      { texto: '¿Cuántos posteos en Instagram tiene …?', tipo: 'numero', placeholder: 'Ej: 42' },
+      { texto: '¿A qué hora tiene seteada la alarma …?', tipo: 'hora', placeholder: '08:30' }
+    ];
+
+    const equipos = ['Equipo 1', 'Equipo 2', 'Equipo 3', 'Equipo 4', 'Equipo 5'];
+    let filas = [];
+    let preguntaActual = 0;
+    let intervaloProbabilidad = null;
+    let respuestasDesdeArchivo = null;
+
+    function aplicarRespuestasCargadas() {
+      const ok = document.getElementById('archivo-ok');
+      const btn = document.getElementById('btn-cargar-respuestas');
+      if (respuestasDesdeArchivo) {
+        if (ok) { ok.textContent = '✓ respuestas.json'; ok.classList.remove('oculto'); }
+        if (btn) btn.classList.add('oculto');
+      } else {
+        if (btn) btn.classList.remove('oculto');
+      }
+    }
+    fetch('respuestas.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        respuestasDesdeArchivo = typeof data === 'object' && data !== null ? data : null;
+        aplicarRespuestasCargadas();
+      })
+      .catch(() => { aplicarRespuestasCargadas(); });
+
+    const selectPregunta = document.getElementById('select-pregunta');
+    const textoPregunta = document.getElementById('texto-pregunta');
+    const tipoRespuesta = document.getElementById('tipo-respuesta');
+    const preguntaAgregarSpan = document.getElementById('pregunta-agregar');
+    const btnAgregarFila = document.getElementById('btn-agregar-fila');
+    const tbodyPreds = document.getElementById('tbody-preds');
+    const resultadoDiv = document.getElementById('resultado');
+    const probabilidadPct = document.getElementById('probabilidad-pct');
+    const barraSurfRelleno = document.getElementById('barra-surf-relleno');
+    const cartelMadera = document.getElementById('cartel-madera');
+    const cartelTexto = cartelMadera && cartelMadera.querySelector('.cartel-texto');
+
+    function esPreguntaHora() {
+      return PREGUNTAS[preguntaActual].tipo === 'hora';
+    }
+
+    function animarProbabilidad() {
+      if (intervaloProbabilidad) clearInterval(intervaloProbabilidad);
+      intervaloProbabilidad = setInterval(() => {
+        if (!probabilidadPct || !barraSurfRelleno) return;
+        const pct = 60 + Math.floor(Math.random() * 36);
+        if (typeof anime !== 'undefined') {
+          anime({
+            targets: probabilidadPct,
+            textContent: [parseInt(probabilidadPct.textContent, 10) || 60, pct],
+            round: 1,
+            duration: 400,
+            easing: 'easeOutQuad'
+          });
+          anime({
+            targets: barraSurfRelleno,
+            width: pct + '%',
+            duration: 500,
+            easing: 'easeOutQuad'
+          });
+        } else {
+          probabilidadPct.textContent = pct;
+          barraSurfRelleno.style.width = pct + '%';
+        }
+      }, 700);
+    }
+
+    function detenerProbabilidad(revelado) {
+      if (intervaloProbabilidad) {
+        clearInterval(intervaloProbabilidad);
+        intervaloProbabilidad = null;
+      }
+      if (revelado && barraSurfRelleno && probabilidadPct) {
+        if (typeof anime !== 'undefined') {
+          anime({
+            targets: barraSurfRelleno,
+            width: '100%',
+            duration: 800,
+            easing: 'easeOutElastic(1, 0.5)'
+          });
+          anime({
+            targets: probabilidadPct,
+            textContent: [parseInt(probabilidadPct.textContent, 10) || 0, 100],
+            round: 1,
+            duration: 600,
+            easing: 'easeOutQuad'
+          });
+        } else {
+          barraSurfRelleno.style.width = '100%';
+          probabilidadPct.textContent = '100';
+        }
+        const suffix = document.getElementById('probabilidad-suffix');
+        if (suffix) suffix.textContent = '% ¡REVELADO!';
+      }
+    }
+
+    function lanzarConfetti() {
+      const container = document.getElementById('confetti-container');
+      if (!container || typeof anime === 'undefined') return;
+      container.innerHTML = '';
+      const colores = ['#e85d04', '#ff9f1c', '#0077b6', '#40916c', '#e9c46a', '#fefae0'];
+      const fragmentos = [];
+      for (let i = 0; i < 55; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti';
+        el.style.left = '50%';
+        el.style.top = '40%';
+        el.style.background = colores[Math.floor(Math.random() * colores.length)];
+        el.style.width = (6 + Math.random() * 8) + 'px';
+        el.style.height = (6 + Math.random() * 8) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(el);
+        fragmentos.push(el);
+      }
+      fragmentos.forEach((el, i) => {
+        const ang = (Math.PI * 2 * i) / fragmentos.length + Math.random() * 2;
+        const dist = 150 + Math.random() * 200;
+        const tx = Math.cos(ang) * dist + (Math.random() - 0.5) * 100;
+        const ty = Math.sin(ang) * dist + (Math.random() - 0.5) * 100;
+        anime({
+          targets: el,
+          translateX: tx,
+          translateY: ty,
+          rotate: Math.random() * 720 - 360,
+          opacity: [1, 0],
+          duration: 1200 + Math.random() * 400,
+          delay: i * 20,
+          easing: 'easeOutQuad',
+          complete: () => el.remove()
+        });
+      });
+    }
+
+    function reiniciarCartel() {
+      const suffix = document.getElementById('probabilidad-suffix');
+      if (suffix) suffix.textContent = '% CALCULANDO...';
+      if (probabilidadPct) probabilidadPct.textContent = '85';
+      if (barraSurfRelleno) barraSurfRelleno.style.width = '75%';
+      cartelMadera && cartelMadera.classList.remove('revelando');
+      animarProbabilidad();
+    }
+
+    function actualizarUI() {
+      const p = PREGUNTAS[preguntaActual];
+      textoPregunta.textContent = p.texto;
+      tipoRespuesta.textContent = p.tipo === 'hora' ? 'Respuesta: hora (ej. 8:30)' : 'Respuesta: número';
+      if (preguntaAgregarSpan) {
+        preguntaAgregarSpan.textContent = selectPregunta.options[preguntaActual].text;
+      }
+      const inputsPred = document.querySelectorAll('.input-pred');
+      inputsPred.forEach(inp => {
+        inp.placeholder = p.placeholder;
+      });
+    }
+
+    const btnOcultarControles = document.getElementById('btn-ocultar-controles');
+    if (btnOcultarControles) {
+      btnOcultarControles.addEventListener('click', () => {
+        document.body.classList.toggle('controles-ocultos');
+      });
+    }
+    const inputArchivoRespuestas = document.getElementById('input-archivo-respuestas');
+    const btnCargarRespuestas = document.getElementById('btn-cargar-respuestas');
+    const archivoOk = document.getElementById('archivo-ok');
+    if (btnCargarRespuestas && inputArchivoRespuestas) {
+      btnCargarRespuestas.addEventListener('click', () => inputArchivoRespuestas.click());
+      inputArchivoRespuestas.addEventListener('change', () => {
+        const file = inputArchivoRespuestas.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            respuestasDesdeArchivo = typeof data === 'object' && data !== null ? data : null;
+          } catch (err) {
+            respuestasDesdeArchivo = null;
+          }
+          aplicarRespuestasCargadas();
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    function actualizarNombresEquipos() {
+      for (let i = 0; i < 5; i++) {
+        const inp = document.getElementById('equipo-' + i);
+        equipos[i] = (inp && inp.value.trim()) || 'Equipo ' + (i + 1);
+        const th = document.getElementById('th-equipo-' + i);
+        if (th) th.textContent = equipos[i];
+        const label = document.getElementById('label-equipo-' + i);
+        if (label) label.textContent = equipos[i];
+      }
+    }
+
+    selectPregunta.addEventListener('change', () => {
+      preguntaActual = parseInt(selectPregunta.value, 10);
+      resultadoDiv.classList.add('oculto');
+      actualizarUI();
+      reiniciarCartel();
+    });
+
+    function parseValorInput(texto, esHora) {
+      const t = texto.trim().replace(',', '.');
+      if (!t) return null;
+      if (esHora) {
+        const part = t.split(':');
+        const h = parseInt(part[0], 10);
+        const m = part.length > 1 ? parseInt(part[1], 10) : 0;
+        if (isNaN(h)) return null;
+        return h * 60 + (isNaN(m) ? 0 : m);
+      }
+      const n = parseFloat(t);
+      return isNaN(n) ? null : n;
+    }
+
+    function addFila() {
+      const inputsPred = document.querySelectorAll('.input-pred');
+      const predicciones = [];
+      const esHora = esPreguntaHora();
+      for (let i = 0; i < 5; i++) {
+        const val = parseValorInput(inputsPred[i].value, esHora);
+        if (val === null) {
+          alert('Completá todas las predicciones de los 5 equipos.');
+          return;
+        }
+        predicciones.push(val);
+      }
+      filas.push({ preguntaIdx: preguntaActual, predicciones, revelado: false, ganadorIdx: null, ganadoresIdx: [] });
+      inputsPred.forEach(inp => inp.value = '');
+      renderTabla();
+      resultadoDiv.classList.add('oculto');
+      inputsPred[0].focus();
+    }
+
+    if (btnAgregarFila) btnAgregarFila.addEventListener('click', addFila);
+    document.querySelectorAll('.input-pred').forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addFila();
+        }
+      });
+    });
+
+    document.querySelectorAll('.input-equipo').forEach(inp => {
+      inp.addEventListener('blur', actualizarNombresEquipos);
+    });
+
+    function formatValor(valor, esHora) {
+      if (esHora) {
+        const h = Math.floor(valor / 60);
+        const m = Math.round(valor % 60);
+        return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+      }
+      return Number.isInteger(valor) ? String(valor) : String(valor);
+    }
+
+    function renderTabla() {
+      if (!tbodyPreds) return;
+      if (filas.length === 0) {
+        tbodyPreds.innerHTML = '<tr class="mensaje-vacio"><td colspan="7">Agregá una fila para empezar</td></tr>';
+        return;
+      }
+      tbodyPreds.innerHTML = filas.map((f, idx) => {
+        const pregunta = PREGUNTAS[f.preguntaIdx];
+        const esHora = pregunta.tipo === 'hora';
+        let celdas = '';
+        for (let i = 0; i < 5; i++) {
+          const esGanador = f.revelado && f.ganadoresIdx && f.ganadoresIdx.includes(i);
+          const clase = esGanador ? 'ganador' : '';
+          const valor = formatValor(f.predicciones[i], esHora);
+          celdas += `<td class="${clase}">${escapeHtml(valor)}</td>`;
+        }
+        const accion = f.revelado 
+          ? '<span style="opacity:0.7;">✓ Revelado</span>' 
+          : `<button type="button" class="btn-revelar-fila" data-idx="${idx}">Revelar</button>`;
+        const claseRow = f.revelado ? 'fila-revelada' : '';
+        const preguntaTexto = selectPregunta.options[f.preguntaIdx] ? selectPregunta.options[f.preguntaIdx].text : pregunta.texto;
+        return `<tr class="${claseRow}"><td>${escapeHtml(preguntaTexto)}</td>${celdas}<td>${accion}</td></tr>`;
+      }).join('');
+      tbodyPreds.querySelectorAll('.btn-revelar-fila').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.idx, 10);
+          revelarFila(idx);
+        });
+      });
+    }
+
+    function escapeHtml(s) {
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function parseRespuestaCorrecta(preguntaIdx, esHora) {
+      const desdeArchivo = respuestasDesdeArchivo && respuestasDesdeArchivo[String(preguntaIdx)] != null
+        ? String(respuestasDesdeArchivo[String(preguntaIdx)]).trim()
+        : '';
+      if (!desdeArchivo) return null;
+      if (esHora) {
+        const part = desdeArchivo.replace(',', '.').split(':');
+        const h = parseInt(part[0], 10);
+        const m = part.length > 1 ? parseInt(part[1], 10) : 0;
+        if (isNaN(h)) return null;
+        return h * 60 + (isNaN(m) ? 0 : m);
+      }
+      const n = parseFloat(desdeArchivo.replace(',', '.'));
+      return isNaN(n) ? null : n;
+    }
+
+    function revelarFila(idx) {
+      const fila = filas[idx];
+      if (!fila || fila.revelado) return;
+      const pregunta = PREGUNTAS[fila.preguntaIdx];
+      const correcta = parseRespuestaCorrecta(fila.preguntaIdx, pregunta.tipo === 'hora');
+      if (correcta === null) {
+        alert('No hay respuesta correcta para esta pregunta en respuestas.json. Verificá el archivo.');
+        return;
+      }
+      const distancias = fila.predicciones.map(p => Math.abs(p - correcta));
+      const minDist = Math.min(...distancias);
+      const ganadoresIdx = distancias.map((d, i) => d === minDist ? i : -1).filter(i => i >= 0);
+      fila.revelado = true;
+      fila.ganadoresIdx = ganadoresIdx;
+      fila.ganadorIdx = ganadoresIdx[0];
+      renderTabla();
+      const nombreGanador = ganadoresIdx.length > 1 ? ganadoresIdx.map(i => equipos[i]).join(' y ') : equipos[ganadoresIdx[0]];
+      const html = '<div class="respuesta-correcta">Respuesta correcta: ' + escapeHtml(formatValor(correcta, pregunta.tipo === 'hora')) + '</div>' +
+                   '<div class="ganador-texto">' + (ganadoresIdx.length > 1 ? '¡Empate! ' : '🏆 Ganador: ') + escapeHtml(nombreGanador) + '</div>';
+      resultadoDiv.innerHTML = html;
+      resultadoDiv.classList.remove('oculto');
+      if (cartelMadera) cartelMadera.classList.add('revelando');
+      detenerProbabilidad(true);
+      setTimeout(() => lanzarConfetti(), 350);
+      mostrarToastRevelado(nombreGanador, ganadoresIdx.length > 1);
+    }
+
+    function revelar() {
+      const ultimaNoRevelada = filas.findIndex(f => !f.revelado);
+      if (ultimaNoRevelada === -1) {
+        alert('No hay filas pendientes de revelar. Agregá una nueva fila.');
+        return;
+      }
+      revelarFila(ultimaNoRevelada);
+    }
+
+    function mostrarToastRevelado(nombreGanador, esEmpate) {
+      const toast = document.getElementById('toast-playero');
+      if (!toast) return;
+      const mensaje = esEmpate ? '¡Empate! ' + nombreGanador : '🏆 ¡Ganador: ' + nombreGanador + '!';
+      toast.innerHTML = '<span class="toast-icon">✨</span>' + mensaje;
+      toast.classList.remove('oculto', 'toast-sale');
+      toast.setAttribute('aria-label', esEmpate ? 'Empate' : 'Ganador: ' + nombreGanador);
+      requestAnimationFrame(() => toast.classList.add('toast-visible'));
+      clearTimeout(toast._timeout);
+      toast._timeout = setTimeout(() => {
+        toast.classList.add('toast-sale');
+        setTimeout(() => {
+          toast.classList.remove('toast-visible');
+          toast.classList.add('oculto');
+        }, 400);
+      }, 3200);
+    }
+
+    const btnRevelarCta = document.getElementById('btn-revelar-cta');
+    if (btnRevelarCta) btnRevelarCta.addEventListener('click', revelar);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        revelar();
+      }
+    });
+
+    actualizarNombresEquipos();
+    actualizarUI();
+    renderTabla();
+    animarProbabilidad();
+
+    if (typeof anime !== 'undefined') {
+      anime({
+        targets: '.contenedor h1',
+        opacity: [0, 1],
+        translateY: [-15, 0],
+        duration: 600,
+        easing: 'easeOutQuad'
+      });
+      anime({
+        targets: '.subtitulo',
+        opacity: [0, 0.95],
+        duration: 500,
+        delay: 150,
+        easing: 'easeOutQuad'
+      });
+      anime({
+        targets: '.marco-bambu',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 550,
+        delay: 250,
+        easing: 'easeOutQuad'
+      });
+      anime({
+        targets: '.cartel-madera',
+        opacity: [0, 1],
+        scale: [0.95, 1],
+        duration: 600,
+        delay: 400,
+        easing: 'easeOutElastic(1, 0.6)'
+      });
+      anime({
+        targets: '.cta-revelar-wrap',
+        opacity: [0, 1],
+        translateY: [15, 0],
+        duration: 500,
+        delay: 650,
+        easing: 'easeOutQuad',
+        complete: () => document.body.classList.add('entrada-listo')
+      });
+    } else {
+      document.body.classList.add('entrada-listo');
+    }
+  </script>
+</body>
+</html>
