@@ -1,9 +1,70 @@
 {
+  "_descripcion": "Respuestas correctas para el juego de predicciones del campamento",
+  "_formato": "Las claves numéricas (0-19) corresponden al índice de cada pregunta",
+  
+  "_seccion_original": "========== PREGUNTAS ORIGINALES (0-6) ==========",
+  
   "0": "500",
+  "_pregunta_0": "🌽 ¿Cuánto sale un choclo de la playa?",
+  
   "1": "3",
+  "_pregunta_1": "👕 ¿Cuántas remeras trajo … al campamento?",
+  
   "2": "2.5",
+  "_pregunta_2": "🚶 ¿Cuánta distancia (km) caminando hay del predio a Iglesia del Salvador?",
+  
   "3": "15000",
+  "_pregunta_3": "💰 ¿Cuánta plata tiene en Mercado Pago …?",
+  
   "4": "20",
+  "_pregunta_4": "🛏️ ¿Cuántas camas tiene el predio?",
+  
   "5": "42",
-  "6": "07:30"
+  "_pregunta_5": "📱 ¿Cuántos posteos en Instagram tiene …?",
+  
+  "6": "07:30",
+  "_pregunta_6": "⏰ ¿A qué hora tiene seteada la alarma …? (formato HH:MM)",
+  
+  "_seccion_digitales": "========== PREGUNTAS NUEVAS - DIGITALES/CELULAR (7-14) ==========",
+  
+  "7": "64",
+  "_pregunta_7": "🔋 ¿Qué porcentaje de batería tiene el celular de … ya mismo?",
+  
+  "8": "12",
+  "_pregunta_8": "💬 ¿Cuántos chats sin leer tiene … en WhatsApp?",
+  
+  "9": "5",
+  "_pregunta_9": "🚫 ¿Cuántos contactos tiene BLOQUEADOS … en WhatsApp?",
+  
+  "10": "2450",
+  "_pregunta_10": "📸 ¿Cuántas fotos tiene en total en la galería …?",
+  
+  "11": "18",
+  "_pregunta_11": "🌐 ¿Cuántas pestañas del navegador tiene abiertas …?",
+  
+  "12": "1500",
+  "_pregunta_12": "📩 ¿Cuántos correos sin leer marca el ícono del mail de …?",
+  
+  "13": "350",
+  "_pregunta_13": "👥 ¿A cuántas personas sigue … en Instagram?",
+  
+  "14": "2",
+  "_pregunta_14": "🤳 ¿Cuántas selfies se sacó … en lo que va del día?",
+  
+  "_seccion_cristiano": "========== PREGUNTAS NUEVAS - CONTEXTO CRISTIANO/CAMPAMENTO (15-19) ==========",
+  
+  "15": "45",
+  "_pregunta_15": "🔥 ¿De cuántos días es la racha de Biblia (YouVersion) de …?",
+  
+  "16": "4",
+  "_pregunta_16": "🙏 ¿Cuántos años hace que … asiste a la iglesia?",
+  
+  "17": "40",
+  "_pregunta_17": "👟 ¿Cuánto calza (talle de zapatillas) …?",
+  
+  "18": "6",
+  "_pregunta_18": "🧦 ¿Cuántos pares de medias trajo …?",
+  
+  "19": "50",
+  "_pregunta_19": "🧴 ¿De cuánto es el factor del protector solar de …?"
 }
