@@ -1,6 +1,6 @@
 {
   "_descripcion": "Respuestas correctas para el juego de predicciones del campamento",
-  "_formato": "Las claves numéricas (0-19) corresponden al índice de cada pregunta",
+  "_formato": "Las claves numéricas (0-35) corresponden al índice de cada pregunta",
   
   "_seccion_original": "========== PREGUNTAS ORIGINALES (0-6) ==========",
   
@@ -25,7 +25,7 @@
   "6": "07:30",
   "_pregunta_6": "⏰ ¿A qué hora tiene seteada la alarma …? (formato HH:MM)",
   
-  "_seccion_digitales": "========== PREGUNTAS NUEVAS - DIGITALES/CELULAR (7-14) ==========",
+  "_seccion_digitales": "========== PREGUNTAS DIGITALES/CELULAR (7-20) ==========",
   
   "7": "64",
   "_pregunta_7": "🔋 ¿Qué porcentaje de batería tiene el celular de … ya mismo?",
@@ -33,38 +33,88 @@
   "8": "12",
   "_pregunta_8": "💬 ¿Cuántos chats sin leer tiene … en WhatsApp?",
   
-  "9": "5",
-  "_pregunta_9": "🚫 ¿Cuántos contactos tiene BLOQUEADOS … en WhatsApp?",
+  "9": "28",
+  "_pregunta_9": "📢 ¿En cuántos grupos de WhatsApp está metido/a …?",
   
-  "10": "2450",
-  "_pregunta_10": "📸 ¿Cuántas fotos tiene en total en la galería …?",
+  "10": "5",
+  "_pregunta_10": "🚫 ¿Cuántos contactos tiene BLOQUEADOS … en WhatsApp?",
   
-  "11": "18",
-  "_pregunta_11": "🌐 ¿Cuántas pestañas del navegador tiene abiertas …?",
+  "11": "32",
+  "_pregunta_11": "⭐ ¿Cuántos stickers tiene guardados en 'Favoritos' de WhatsApp …?",
   
-  "12": "1500",
-  "_pregunta_12": "📩 ¿Cuántos correos sin leer marca el ícono del mail de …?",
+  "12": "2450",
+  "_pregunta_12": "📸 ¿Cuántas fotos tiene en total en la galería …?",
   
-  "13": "350",
-  "_pregunta_13": "👥 ¿A cuántas personas sigue … en Instagram?",
+  "13": "2",
+  "_pregunta_13": "🤳 ¿Cuántas selfies se sacó … en lo que va del día?",
   
-  "14": "2",
-  "_pregunta_14": "🤳 ¿Cuántas selfies se sacó … en lo que va del día?",
+  "14": "18",
+  "_pregunta_14": "🌐 ¿Cuántas pestañas del navegador tiene abiertas …?",
   
-  "_seccion_cristiano": "========== PREGUNTAS NUEVAS - CONTEXTO CRISTIANO/CAMPAMENTO (15-19) ==========",
+  "15": "1500",
+  "_pregunta_15": "📩 ¿Cuántos correos sin leer marca el ícono del mail de …?",
   
-  "15": "45",
-  "_pregunta_15": "🔥 ¿De cuántos días es la racha de Biblia (YouVersion) de …?",
+  "16": "350",
+  "_pregunta_16": "👥 ¿A cuántas personas sigue … en Instagram?",
   
-  "16": "4",
-  "_pregunta_16": "🙏 ¿Cuántos años hace que … asiste a la iglesia?",
+  "17": "45",
+  "_pregunta_17": "🟢 ¿A cuántas personas tiene … en 'Mejores Amigos' (CF) de Instagram?",
   
-  "17": "40",
-  "_pregunta_17": "👟 ¿Cuánto calza (talle de zapatillas) …?",
+  "18": "15",
+  "_pregunta_18": "📝 ¿Cuántas notas tiene creadas en la app de notas del celular …?",
   
-  "18": "6",
-  "_pregunta_18": "🧦 ¿Cuántos pares de medias trajo …?",
+  "19": "8",
+  "_pregunta_19": "⏰ ¿Cuántas alarmas tiene creadas en total (activas o no) …?",
   
-  "19": "50",
-  "_pregunta_19": "🧴 ¿De cuánto es el factor del protector solar de …?"
+  "20": "640",
+  "_pregunta_20": "📞 ¿Cuántos contactos tiene guardados en la agenda …?",
+  
+  "_seccion_logistica": "========== PREGUNTAS LOGÍSTICA/VALIJA/FÍSICO (21-30) ==========",
+  
+  "21": "40",
+  "_pregunta_21": "👟 ¿Cuánto calza (talle de zapatillas) …?",
+  
+  "22": "3",
+  "_pregunta_22": "👟 ¿Cuántos pares de calzado (zapatillas + ojotas) trajo … en total?",
+  
+  "23": "6",
+  "_pregunta_23": "🧦 ¿Cuántos pares de medias trajo …?",
+  
+  "24": "2",
+  "_pregunta_24": "🧥 ¿Cuántos buzos o camperas trajo …?",
+  
+  "25": "4",
+  "_pregunta_25": "👖 ¿Cuántos pantalones (cortos + largos) trajo … en total?",
+  
+  "26": "2",
+  "_pregunta_26": "🔌 ¿Cuántos cables/cargadores trajo … en la mochila?",
+  
+  "27": "50",
+  "_pregunta_27": "🧴 ¿De cuánto es el factor del protector solar de …?",
+  
+  "28": "5",
+  "_pregunta_28": "💵 ¿Cuántos billetes (físicos) tiene … en la billetera ahora mismo?",
+  
+  "29": "5",
+  "_pregunta_29": "💳 ¿Cuántas tarjetas plásticas (DNI, débito, SUBE, obra social) tiene encima …?",
+  
+  "30": "175",
+  "_pregunta_30": "📏 ¿Cuánto mide (en cm) …?",
+  
+  "_seccion_cristiano": "========== PREGUNTAS CONTEXTO CRISTIANO/PERSONAL (31-36) ==========",
+  
+  "31": "45",
+  "_pregunta_31": "🔥 ¿De cuántos días es la racha de Biblia (YouVersion) de …?",
+  
+  "32": "4",
+  "_pregunta_32": "🙏 ¿Cuántos años hace que … asiste a la iglesia?",
+  
+  "33": "6",
+  "_pregunta_33": "🏕️ ¿A cuántos campamentos asistió … en su vida (aprox)?",
+  
+  "34": "4",
+  "_pregunta_34": "📖 ¿Cuántas Biblias físicas hay en la habitación donde duerme …?",
+  
+  "35": "1",
+  "_pregunta_35": "⛪ ¿En cuántas áreas/ministerios de la iglesia sirve …?"
 }
