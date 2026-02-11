@@ -74,7 +74,7 @@
       z-index: -1;
     }
     .contenedor {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
       position: relative;
       z-index: 10;
@@ -416,7 +416,7 @@
     }
     .equipos-inputs {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
     }
     
@@ -906,49 +906,43 @@
 
   <script>
     const PREGUNTAS = [
-      // --- Las 7 Originales ---
+      // ORDEN MEZCLADO PARA EVITAR MONOTONÍA
       { texto: '🌽 ¿Cuánto sale un choclo de la playa?', tipo: 'numero', placeholder: 'Ej: 500' },
-      { texto: '👕 ¿Cuántas remeras trajo … al campamento?', tipo: 'numero', placeholder: 'Ej: 3' },
-      { texto: '🚶 ¿Cuánta distancia (km) caminando hay del predio a Iglesia del Salvador?', tipo: 'numero', placeholder: 'Ej: 2.5' },
-      { texto: '💰 ¿Cuánta plata tiene en Mercado Pago …?', tipo: 'numero', placeholder: 'Ej: 15000' },
-      { texto: '🛏️ ¿Cuántas camas tiene el predio?', tipo: 'numero', placeholder: 'Ej: 20' },
-      { texto: '📱 ¿Cuántos posteos en Instagram tiene …?', tipo: 'numero', placeholder: 'Ej: 42' },
-      { texto: '⏰ ¿A qué hora tiene seteada la alarma …?', tipo: 'hora', placeholder: '08:30' },
-
-      // --- Digital / Celular (Lo que más se revisa en el momento) ---
       { texto: '🔋 ¿Qué porcentaje de batería tiene el celular de … ya mismo?', tipo: 'numero', placeholder: 'Ej: 64' },
+      { texto: '👟 ¿Cuánto calza (talle de zapatillas) …?', tipo: 'numero', placeholder: 'Ej: 40' },
+      { texto: '🔥 ¿De cuántos días es la racha de Biblia (YouVersion) de …?', tipo: 'numero', placeholder: 'Ej: 45' },
+      { texto: '👕 ¿Cuántas remeras trajo … al campamento?', tipo: 'numero', placeholder: 'Ej: 3' },
       { texto: '💬 ¿Cuántos chats sin leer tiene … en WhatsApp?', tipo: 'numero', placeholder: 'Ej: 12' },
+      { texto: '👟 ¿Cuántos pares de calzado (zapatillas + ojotas) trajo … en total?', tipo: 'numero', placeholder: 'Ej: 3' },
+      { texto: '⏰ ¿A qué hora tiene seteada la alarma …?', tipo: 'hora', placeholder: '08:30' },
+      { texto: '🚶 ¿Cuánta distancia (km) caminando hay del predio a Iglesia del Salvador?', tipo: 'numero', placeholder: 'Ej: 2.5' },
       { texto: '📢 ¿En cuántos grupos de WhatsApp está metido/a …?', tipo: 'numero', placeholder: 'Ej: 28' },
+      { texto: '🧦 ¿Cuántos pares de medias trajo …?', tipo: 'numero', placeholder: 'Ej: 6' },
+      { texto: '🙏 ¿Cuántos años hace que … asiste a la iglesia?', tipo: 'numero', placeholder: 'Ej: 4' },
+      { texto: '💰 ¿Cuánta plata tiene en Mercado Pago …?', tipo: 'numero', placeholder: 'Ej: 15000' },
       { texto: '🚫 ¿Cuántos contactos tiene BLOQUEADOS … en WhatsApp?', tipo: 'numero', placeholder: 'Ej: 5' },
+      { texto: '🧥 ¿Cuántos buzos o camperas trajo …?', tipo: 'numero', placeholder: 'Ej: 2' },
+      { texto: '🛏️ ¿Cuántas camas tiene el predio?', tipo: 'numero', placeholder: 'Ej: 20' },
       { texto: '⭐ ¿Cuántos stickers tiene guardados en "Favoritos" de WhatsApp …?', tipo: 'numero', placeholder: 'Ej: 32' },
+      { texto: '👖 ¿Cuántos pantalones (cortos + largos) trajo … en total?', tipo: 'numero', placeholder: 'Ej: 4' },
+      { texto: '🏕️ ¿A cuántos campamentos asistió … en su vida (aprox)?', tipo: 'numero', placeholder: 'Ej: 6' },
+      { texto: '📱 ¿Cuántos posteos en Instagram tiene …?', tipo: 'numero', placeholder: 'Ej: 42' },
       { texto: '📸 ¿Cuántas fotos tiene en total en la galería …?', tipo: 'numero', placeholder: 'Ej: 2450' },
+      { texto: '🔌 ¿Cuántos cables/cargadores trajo … en la mochila?', tipo: 'numero', placeholder: 'Ej: 2' },
+      { texto: '📖 ¿Cuántas Biblias físicas hay en la habitación donde duerme …?', tipo: 'numero', placeholder: 'Ej: 4' },
       { texto: '🤳 ¿Cuántas selfies se sacó … en lo que va del día?', tipo: 'numero', placeholder: 'Ej: 2' },
+      { texto: '🧴 ¿De cuánto es el factor del protector solar de …?', tipo: 'numero', placeholder: 'Ej: 50' },
       { texto: '🌐 ¿Cuántas pestañas del navegador tiene abiertas …?', tipo: 'numero', placeholder: 'Ej: 18' },
+      { texto: '💵 ¿Cuántos billetes (físicos) tiene … en la billetera ahora mismo?', tipo: 'numero', placeholder: 'Ej: 5' },
+      { texto: '⛪ ¿En cuántas áreas/ministerios de la iglesia sirve …?', tipo: 'numero', placeholder: 'Ej: 1' },
       { texto: '📩 ¿Cuántos correos sin leer marca el ícono del mail de …?', tipo: 'numero', placeholder: 'Ej: 1500' },
+      { texto: '💳 ¿Cuántas tarjetas plásticas (DNI, débito, SUBE, etc) tiene encima …?', tipo: 'numero', placeholder: 'Ej: 5' },
       { texto: '👥 ¿A cuántas personas sigue … en Instagram?', tipo: 'numero', placeholder: 'Ej: 350' },
+      { texto: '📏 ¿Cuánto mide (en cm) …?', tipo: 'numero', placeholder: 'Ej: 175' },
       { texto: '🟢 ¿A cuántas personas tiene … en "Mejores Amigos" (CF) de Instagram?', tipo: 'numero', placeholder: 'Ej: 45' },
       { texto: '📝 ¿Cuántas notas tiene creadas en la app de notas del celular …?', tipo: 'numero', placeholder: 'Ej: 15' },
       { texto: '⏰ ¿Cuántas alarmas tiene creadas en total (activas o no) …?', tipo: 'numero', placeholder: 'Ej: 8' },
-      { texto: '📞 ¿Cuántos contactos tiene guardados en la agenda …?', tipo: 'numero', placeholder: 'Ej: 640' },
-
-      // --- Logística / Valija / Físico ---
-      { texto: '👟 ¿Cuánto calza (talle de zapatillas) …?', tipo: 'numero', placeholder: 'Ej: 40' },
-      { texto: '👟 ¿Cuántos pares de calzado (zapatillas + ojotas) trajo … en total?', tipo: 'numero', placeholder: 'Ej: 3' },
-      { texto: '🧦 ¿Cuántos pares de medias trajo …?', tipo: 'numero', placeholder: 'Ej: 6' },
-      { texto: '🧥 ¿Cuántos buzos o camperas trajo …?', tipo: 'numero', placeholder: 'Ej: 2' },
-      { texto: '👖 ¿Cuántos pantalones (cortos + largos) trajo … en total?', tipo: 'numero', placeholder: 'Ej: 4' },
-      { texto: '🔌 ¿Cuántos cables/cargadores trajo … en la mochila?', tipo: 'numero', placeholder: 'Ej: 2' },
-      { texto: '🧴 ¿De cuánto es el factor del protector solar de …?', tipo: 'numero', placeholder: 'Ej: 50' },
-      { texto: '💵 ¿Cuántos billetes (físicos) tiene … en la billetera ahora mismo?', tipo: 'numero', placeholder: 'Ej: 5' },
-      { texto: '💳 ¿Cuántas tarjetas plásticas (DNI, débito, SUBE, obra social) tiene encima …?', tipo: 'numero', placeholder: 'Ej: 5' },
-      { texto: '📏 ¿Cuánto mide (en cm) …?', tipo: 'numero', placeholder: 'Ej: 175' },
-
-      // --- Contexto Cristiano / Personal ---
-      { texto: '🔥 ¿De cuántos días es la racha de Biblia (YouVersion) de …?', tipo: 'numero', placeholder: 'Ej: 45' },
-      { texto: '🙏 ¿Cuántos años hace que … asiste a la iglesia?', tipo: 'numero', placeholder: 'Ej: 4' },
-      { texto: '🏕️ ¿A cuántos campamentos asistió … en su vida (aprox)?', tipo: 'numero', placeholder: 'Ej: 6' },
-      { texto: '📖 ¿Cuántas Biblias físicas hay en la habitación donde duerme …?', tipo: 'numero', placeholder: 'Ej: 4' },
-      { texto: '⛪ ¿En cuántas áreas/ministerios de la iglesia sirve …?', tipo: 'numero', placeholder: 'Ej: 1' }
+      { texto: '📞 ¿Cuántos contactos tiene guardados en la agenda …?', tipo: 'numero', placeholder: 'Ej: 640' }
     ];
 
     const equipos = ['Equipo 1', 'Equipo 2', 'Equipo 3', 'Equipo 4', 'Equipo 5', 'Equipo 6'];
