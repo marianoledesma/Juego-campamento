@@ -7,54 +7,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Titan+One&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      /* Material Design 3 - Colores Playeros 🏖️ */
-      --md-primary: #00B4D8;
-      --md-on-primary: #ffffff;
-      --md-primary-container: #CAF0F8;
-      --md-on-primary-container: #003d52;
+      /* SUMMER POP PALETTE 🌊☀️ */
+      --color-ocean-start: #4facfe;
+      --color-ocean-end: #00f2fe;
+      --color-sunset: #FF7E5F;
+      --color-corn: #FFD700;
+      --color-coral: #FF6B6B;
+      --color-navy: #0F172A;
+      --color-white: #FFFFFF;
+      --color-sand: #FFE5B4;
       
-      --md-secondary: #FF9F1C;
-      --md-on-secondary: #ffffff;
-      --md-secondary-container: #FFE5B4;
-      --md-on-secondary-container: #5c3a00;
-      
-      --md-tertiary: #06B6D4;
-      --md-on-tertiary: #ffffff;
-      --md-tertiary-container: #A7F3D0;
-      --md-on-tertiary-container: #064e3b;
-      
-      --md-error: #EF4444;
-      --md-on-error: #ffffff;
-      --md-error-container: #FECACA;
-      --md-on-error-container: #7f1d1d;
-      
-      --md-background: #FFFEF9;
-      --md-on-background: #1a1a1a;
-      --md-surface: #FFFFFF;
-      --md-on-surface: #1a1a1a;
-      --md-surface-variant: #E0F2FE;
-      --md-on-surface-variant: #0c4a6e;
-      --md-outline: #64B5F6;
-      --md-outline-variant: #B3E5FC;
-      
-      /* Elevaciones */
-      --md-elevation-1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      --md-elevation-2: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
-      --md-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
-      --md-elevation-4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
+      /* Sombras con efecto 3D/Flat */
+      --shadow-flat: 6px 6px 0px rgba(0, 0, 0, 0.2);
+      --shadow-flat-hover: 8px 8px 0px rgba(0, 0, 0, 0.25);
+      --shadow-winner: 8px 8px 0px rgba(255, 215, 0, 0.6);
       
       /* Border radius */
-      --md-radius-xs: 4px;
-      --md-radius-sm: 8px;
-      --md-radius-md: 12px;
-      --md-radius-lg: 16px;
-      --md-radius-xl: 28px;
-      --md-radius-full: 9999px;
+      --radius-card: 20px;
+      --radius-button: 16px;
+      --radius-full: 9999px;
     }
     * { box-sizing: border-box; }
     
@@ -77,9 +55,10 @@
       margin: 0;
       min-height: 100vh;
       font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--md-on-background);
-      padding: 0.5rem 1rem 1rem;
+      color: var(--color-navy);
+      padding: 0;
       position: relative;
+      overflow-x: hidden;
     }
     body::before {
       content: '';
@@ -88,51 +67,99 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(180deg, 
-        rgba(135, 206, 235, 0.75) 0%, 
-        rgba(202, 240, 248, 0.8) 40%, 
-        rgba(255, 229, 180, 0.75) 100%);
+      background: linear-gradient(135deg, 
+        var(--color-ocean-start) 0%, 
+        var(--color-ocean-end) 100%);
       pointer-events: none;
       z-index: -1;
     }
     .contenedor {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       position: relative;
       z-index: 10;
-      padding-bottom: 2rem;
+      padding: 80px 1.5rem 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* NAVEGACIÓN SUPERIOR DISCRETA */
+    .nav-superior {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .nav-arrow {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--color-white);
+      border: 3px solid var(--color-navy);
+      color: var(--color-navy);
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.15);
+    }
+    .nav-arrow:hover {
+      transform: scale(1.1);
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+    }
+    .nav-arrow:active {
+      transform: scale(0.95);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+    }
+    .nav-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: scale(1);
     }
     
     /* BOTÓN FLOTANTE DE AYUDA (FAB) */
     .btn-flotante-ayuda {
       position: fixed;
-      top: 1.5rem;
+      bottom: 1.5rem;
       right: 1.5rem;
       z-index: 1000;
-      width: 60px;
-      height: 60px;
-      border-radius: var(--md-radius-xl);
-      background: rgba(255, 229, 180, 0.95);
-      border: none;
-      color: var(--md-on-secondary-container);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--color-sand);
+      border: 3px solid var(--color-navy);
+      color: var(--color-navy);
       font-size: 1.75rem;
       font-weight: 500;
       cursor: pointer;
-      box-shadow: var(--md-elevation-4);
-      transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                  transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: inherit;
-      backdrop-filter: blur(8px);
     }
     .btn-flotante-ayuda:hover {
-      box-shadow: 0 8px 24px rgba(255, 159, 28, 0.4);
-      transform: scale(1.08);
+      transform: scale(1.1);
+      box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.25);
     }
     .btn-flotante-ayuda:active {
       transform: scale(0.95);
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
     }
     
     /* MODAL */
@@ -142,379 +169,539 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 200;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
     }
     .modal-contenido {
-      background: rgba(255, 255, 255, 0.98);
-      border: none;
-      border-radius: var(--md-radius-xl);
-      padding: 1.5rem;
+      background: var(--color-white);
+      border: 4px solid var(--color-navy);
+      border-radius: var(--radius-card);
+      padding: 2rem;
       max-width: 500px;
       width: 100%;
-      box-shadow: var(--md-elevation-4);
-      color: var(--md-on-surface);
-      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-flat);
+      color: var(--color-navy);
+      animation: modal-pop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
+    
+    @keyframes modal-pop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
     .modal-contenido h3 {
       margin-top: 0;
-      margin-bottom: 0.5rem;
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: var(--md-on-surface);
+      margin-bottom: 1rem;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--color-navy);
     }
     .modal-contenido p {
       margin-bottom: 1.5rem;
-      color: var(--md-on-surface-variant);
-      font-size: 0.95rem;
+      color: var(--color-navy);
+      font-size: 1rem;
+      opacity: 0.8;
     }
     .modal-contenido input[type="file"] {
       width: 100%;
       padding: 1rem;
       margin-bottom: 1.5rem;
-      background: var(--md-surface-variant);
-      color: var(--md-on-surface-variant);
-      border: 1px solid var(--md-outline-variant);
-      border-radius: var(--md-radius-sm);
+      background: var(--color-white);
+      color: var(--color-navy);
+      border: 3px solid var(--color-navy);
+      border-radius: 12px;
       font-family: inherit;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      transition: all 0.2s ease;
     }
     .modal-contenido input[type="file"]:hover {
-      background: var(--md-surface);
-      border-color: var(--md-outline);
+      background: var(--color-sand);
+      transform: translateY(-2px);
     }
     .archivo-ok {
-      padding: 0.75rem;
+      padding: 1rem;
       margin-bottom: 1rem;
-      background: var(--md-tertiary-container);
-      color: var(--md-on-tertiary-container);
-      border-radius: var(--md-radius-sm);
-      font-size: 0.9rem;
-      font-weight: 500;
+      background: linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 100%);
+      color: var(--color-navy);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
       text-align: center;
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.15);
     }
     
-    /* ÁREA DE PREGUNTA GRANDE */
+    /* HERO SECTION - PREGUNTA PRINCIPAL */
     .area-pregunta-grande {
-      background: var(--md-primary-container);
+      background: var(--color-white);
       border: none;
-      border-radius: var(--md-radius-xl);
-      padding: 2.5rem 2rem;
-      margin: 0.5rem auto 1.5rem;
+      border-radius: var(--radius-card);
+      padding: 3rem 2rem;
+      margin: 0 auto 2.5rem;
       text-align: center;
-      box-shadow: var(--md-elevation-3);
+      box-shadow: var(--shadow-flat);
       position: relative;
-      min-height: 200px;
+      min-height: 280px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(8px);
-      background: rgba(202, 240, 248, 0.95);
+      gap: 2rem;
+      transition: all 0.3s ease;
     }
     .area-pregunta-grande:hover {
-      box-shadow: var(--md-elevation-4);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-flat-hover);
     }
     .area-pregunta-grande h2 {
-      font-size: clamp(1.75rem, 4.5vw, 3.5rem);
-      line-height: 1.25;
-      margin: 0 0 1.5rem 0;
-      color: var(--md-on-primary-container);
-      font-weight: 500;
-      letter-spacing: -0.02em;
+      font-family: 'Fredoka One', 'Titan One', cursive;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      line-height: 1.2;
+      margin: 0;
+      color: var(--color-navy);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      text-shadow: 3px 3px 0px rgba(255, 215, 0, 0.3);
+      animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transition: font-size 0.3s ease;
     }
     
-    /* NAVEGACIÓN DE PREGUNTAS */
-    .navegacion-preguntas {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      width: 100%;
+    /* Tipografía Adaptable según longitud */
+    .area-pregunta-grande h2.text-corto {
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
     }
-    .btn-nav {
-      padding: 0.75rem 1.75rem;
-      font-family: inherit;
-      font-size: 1.1rem;
-      font-weight: 500;
-      background: var(--md-primary);
-      color: var(--md-on-primary);
-      border: none;
-      border-radius: var(--md-radius-full);
-      cursor: pointer;
-      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                  box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                  transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--md-elevation-1);
-      letter-spacing: 0.01em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      min-width: 130px;
+    
+    .area-pregunta-grande h2.text-medio {
+      font-size: clamp(2rem, 6vw, 4.5rem);
     }
-    .btn-nav:hover {
-      box-shadow: var(--md-elevation-2);
-      filter: brightness(1.1);
+    
+    .area-pregunta-grande h2.text-largo {
+      font-size: clamp(1.5rem, 4.5vw, 3.5rem);
     }
-    .btn-nav:active {
-      transform: scale(0.98);
-      box-shadow: var(--md-elevation-1);
+    
+    .area-pregunta-grande h2.text-muy-largo {
+      font-size: clamp(1.25rem, 3.5vw, 2.75rem);
     }
-    .btn-nav:disabled {
-      opacity: 0.38;
-      cursor: not-allowed;
-      box-shadow: none;
+    
+    /* Emoji destacado en el título */
+    .area-pregunta-grande h2 .emoji-icon {
+      display: inline-block;
+      font-size: 1.2em;
+      margin-right: 0.25em;
+      animation: emoji-bounce 1s ease-in-out infinite;
     }
-    #btn-pregunta-anterior::before {
-      content: '‹';
-      font-size: 1.8rem;
-      line-height: 0.8;
-      font-weight: 300;
+    
+    @keyframes emoji-bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      50% { transform: translateY(-8px) rotate(5deg) scale(1.1); }
     }
-    #btn-pregunta-siguiente::after {
-      content: '›';
-      font-size: 1.8rem;
-      line-height: 0.8;
-      font-weight: 300;
+    
+    /* Mejora visual para el emoji en responsive */
+    @media (max-width: 768px) {
+      .area-pregunta-grande h2 .emoji-icon {
+        font-size: 1.15em;
+        margin-right: 0.2em;
+      }
     }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
     .contador-pregunta {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--md-on-primary-container);
-      padding: 0.75rem 1.5rem;
-      background: rgba(255,255,255,0.75);
-      border-radius: var(--md-radius-full);
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--color-navy);
+      padding: 0.5rem 1.5rem;
+      background: var(--color-corn);
+      border-radius: var(--radius-full);
       letter-spacing: 0.02em;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      white-space: nowrap;
     }
     /* ÁREA DE PREDICCIONES */
     .area-predicciones {
       background: rgba(255, 255, 255, 0.95);
       border: none;
-      border-radius: var(--md-radius-xl);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--md-elevation-3);
-      transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(8px);
-    }
-    .area-predicciones:hover {
-      box-shadow: var(--md-elevation-4);
+      border-radius: var(--radius-card);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-flat);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
     }
     .area-predicciones h3 {
-      margin: 0 0 1.5rem 0;
-      font-size: 1.375rem;
-      font-weight: 500;
+      margin: 0 0 2rem 0;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.75rem;
+      font-weight: 400;
       text-align: center;
-      color: var(--md-on-surface);
-      letter-spacing: -0.01em;
+      color: var(--color-navy);
+      letter-spacing: 0.02em;
     }
     
-    /* BOTÓN REVELAR */
+    /* BOTÓN REVELAR - PROTAGONISTA ABSOLUTO */
+    .btn-revelar-container {
+      text-align: center;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    
     .btn-flotante-revelar {
-      padding: 1.25rem 2.5rem;
-      font-family: inherit;
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      color: var(--md-on-primary);
+      padding: 1.75rem 4rem;
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--color-white);
       border: none;
-      border-radius: var(--md-radius-xl);
+      border-radius: var(--radius-button);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.75rem;
-      background: var(--md-primary);
-      box-shadow: var(--md-elevation-4);
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                  box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: 1rem;
+      background: linear-gradient(135deg, var(--color-sunset) 0%, var(--color-coral) 100%);
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3);
+      transition: all 0.2s ease;
       white-space: nowrap;
-      margin: 0 auto;
+      position: relative;
+      text-transform: uppercase;
+      animation: pulse-glow 2s infinite;
     }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 126, 95, 0.4); }
+      50% { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.3), 0 0 50px rgba(255, 126, 95, 0.8); }
+    }
+    
     .btn-flotante-revelar:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0, 180, 216, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 0 rgba(0, 0, 0, 0.3), 0 0 60px rgba(255, 126, 95, 1);
     }
     .btn-flotante-revelar:active {
-      transform: scale(0.97);
-      box-shadow: var(--md-elevation-3);
-    }
-    .btn-revelar-container {
-      text-align: center;
-      margin: 2rem 0;
-      padding: 0 1rem;
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
     }
     .btn-flotante-revelar .cta-icon {
-      font-size: 1.35em;
+      font-size: 1.5em;
       line-height: 1;
+      animation: rotate-star 3s linear infinite;
     }
+    
+    @keyframes rotate-star {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
     .btn-flotante-revelar .cta-text {
-      font-weight: 500;
-      letter-spacing: 0.02em;
+      font-weight: 400;
+      letter-spacing: 0.1em;
     }
     .equipos-config {
       margin: 0;
     }
     .equipos-inputs {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
     }
+    
+    /* GAMIFICACIÓN: Fichas de Juego */
     .input-fila-item {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      background: var(--md-surface-variant);
-      padding: 0.875rem;
-      border-radius: var(--md-radius-md);
-      border: none;
-      transition: background 0.2s;
+      gap: 1rem;
+      background: var(--color-white);
+      padding: 1.25rem;
+      border-radius: var(--radius-card);
+      border: 4px solid var(--color-navy);
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
     }
     .input-fila-item:hover {
-      background: var(--md-secondary-container);
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
     }
-    .input-fila-item label {
+    
+    /* Estado "Listo" - cuando hay valor */
+    .input-fila-item.listo {
+      border-color: var(--color-sunset);
+      background: linear-gradient(135deg, #fff 0%, #fff8f0 100%);
+    }
+    .input-fila-item.listo::after {
+      content: '✓';
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 28px;
+      height: 28px;
+      background: var(--color-sunset);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-size: 1rem;
-      font-weight: 600;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Estado "Ganador" */
+    .input-fila-item.ganador {
+      border-color: var(--color-corn) !important;
+      background: linear-gradient(135deg, #FFD700 0%, #FFF9C4 100%) !important;
+      transform: scale(1.1) !important;
+      box-shadow: var(--shadow-winner) !important;
+      animation: winner-pulse 0.6s ease-out;
+      z-index: 10;
+    }
+    .input-fila-item.ganador::before {
+      content: '🏆';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      animation: trophy-bounce 0.8s ease-out;
+    }
+    
+    @keyframes winner-pulse {
+      0%, 100% { transform: scale(1.1); }
+      50% { transform: scale(1.15); }
+    }
+    
+    @keyframes trophy-bounce {
+      0% { transform: translateX(-50%) translateY(-30px) scale(0); }
+      60% { transform: translateX(-50%) translateY(5px) scale(1.2); }
+      100% { transform: translateX(-50%) translateY(0) scale(1); }
+    }
+    
+    /* Estado "Perdedor" */
+    .input-fila-item.perdedor {
+      opacity: 0.5;
+      filter: grayscale(0.3);
+    }
+    
+    .input-fila-item label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      font-weight: 400;
       text-align: center;
-      color: var(--md-on-surface-variant);
+      color: var(--color-navy);
       letter-spacing: 0.05em;
     }
-    .input-pred {
-      padding: 0.75rem;
-      font-size: 1.5rem;
-      font-family: inherit;
-      border-radius: var(--md-radius-sm);
-      border: 2px solid var(--md-primary);
-      background: var(--md-surface);
-      color: var(--md-on-surface);
-      font-weight: 500;
-      text-align: center;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
+    
+    /* Contenedor del input con prefijo/sufijo */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
     }
+    
+    .input-prefix,
+    .input-suffix {
+      position: absolute;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-navy);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .input-prefix {
+      left: 1rem;
+    }
+    
+    .input-suffix {
+      right: 1rem;
+      font-size: 1.25rem;
+      opacity: 0.5;
+    }
+    
+    .input-pred {
+      padding: 1rem;
+      font-size: 1.75rem;
+      font-family: 'Roboto', sans-serif;
+      border-radius: 12px;
+      border: 3px solid var(--color-navy);
+      background: var(--color-white);
+      color: var(--color-navy);
+      font-weight: 700;
+      text-align: center;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    
+    /* Ajustar padding cuando hay prefijo/sufijo */
+    .input-pred.has-prefix {
+      padding-left: 2.5rem;
+    }
+    
+    .input-pred.has-suffix {
+      padding-right: 3rem;
+    }
+    
     .input-pred:focus {
       outline: none;
-      border-color: var(--md-primary);
-      box-shadow: 0 0 0 3px rgba(0, 100, 151, 0.2);
-      transform: scale(1.02);
+      border-color: var(--color-sunset);
+      box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.2);
+      transform: scale(1.05);
     }
-    /* Resultado revelado */
+    .input-pred::placeholder {
+      color: rgba(15, 23, 42, 0.3);
+    }
+    
+    /* Input tipo hora */
+    .input-pred[type="time"] {
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 0.1em;
+    }
+    /* RESULTADO REVELADO - DRAMÁTICO */
     .resultado-revelado {
-      background: rgba(167, 243, 208, 0.95);
-      border: none;
-      border-radius: var(--md-radius-xl);
-      padding: 2rem;
-      margin: 1.5rem 0;
+      background: var(--color-white);
+      border: 6px solid var(--color-corn);
+      border-radius: var(--radius-card);
+      padding: 3rem 2rem;
+      margin: 2rem 0;
       text-align: center;
-      box-shadow: var(--md-elevation-4);
-      animation: resultadoEntra 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      box-shadow: var(--shadow-winner);
+      animation: resultadoEntra 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .resultado-revelado::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+      animation: shine 2s infinite;
+    }
+    
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+    
     @keyframes resultadoEntra {
-      from { opacity: 0; transform: scale(0.92) translateY(-8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+      60% { transform: scale(1.1) rotate(2deg); }
+      to { opacity: 1; transform: scale(1) rotate(0deg); }
     }
+    
     .resultado-revelado .respuesta-correcta {
-      font-size: clamp(1.375rem, 3vw, 2.25rem);
-      font-weight: 500;
-      margin-bottom: 1rem;
-      color: var(--md-on-tertiary-container);
-      letter-spacing: -0.01em;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      color: var(--color-navy);
+      letter-spacing: 0.02em;
+      animation: number-pop 0.8s ease-out;
+      position: relative;
+      z-index: 1;
     }
+    
+    @keyframes number-pop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    
     .resultado-revelado .ganador-texto {
-      font-size: clamp(1.125rem, 2.25vw, 1.75rem);
-      font-weight: 500;
-      color: var(--md-on-tertiary-container);
-      letter-spacing: -0.01em;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 400;
+      color: var(--color-sunset);
+      letter-spacing: 0.05em;
+      animation: winner-appear 1s ease-out 0.5s both;
+      position: relative;
+      z-index: 1;
+    }
+    
+    @keyframes winner-appear {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     .btn {
-      padding: 0.625rem 1.5rem;
-      font-size: 0.95rem;
-      font-family: inherit;
-      font-weight: 500;
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 600;
       border: none;
-      border-radius: var(--md-radius-full);
+      border-radius: var(--radius-button);
       cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                  box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      letter-spacing: 0.01em;
+      transition: all 0.2s ease;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
     .btn:hover { 
-      transform: scale(1.02);
-      box-shadow: var(--md-elevation-2);
+      transform: translateY(-2px);
     }
     .btn:active { 
-      transform: scale(0.98);
-      box-shadow: var(--md-elevation-1);
+      transform: scale(0.95);
     }
     .btn-primario {
-      background: var(--md-primary);
-      color: var(--md-on-primary);
-      box-shadow: var(--md-elevation-1);
+      background: var(--color-navy);
+      color: var(--color-white);
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
     }
     .btn-primario:hover { 
-      box-shadow: var(--md-elevation-2);
-      filter: brightness(1.1);
+      box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.35);
+    }
+    .btn-primario:active {
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
     }
     .btn-secundario {
-      background: var(--md-secondary);
-      color: var(--md-on-secondary);
-      box-shadow: var(--md-elevation-1);
+      background: var(--color-sunset);
+      color: var(--color-white);
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
     }
     .btn-secundario:hover { 
-      box-shadow: var(--md-elevation-2);
-      filter: brightness(1.1);
+      box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.35);
+    }
+    .btn-secundario:active {
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.3);
     }
     .btn-chico {
-      padding: 0.5rem 1rem;
+      padding: 0.625rem 1.25rem;
       font-size: 0.875rem;
     }
     .oculto { display: none !important; }
-    /* Contenedor de confetti/partículas */
-    #confetti-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      overflow: hidden;
-    }
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
-    }
-    /* Toast / Snackbar Material Design */
+    /* Toast / Snackbar Playero */
     .toast-playero {
       position: fixed;
-      top: 1.5rem;
+      top: 90px;
       left: 50%;
       transform: translateX(-50%) translateY(-100px);
       z-index: 10000;
-      padding: 0.875rem 1.5rem;
-      border-radius: var(--md-radius-md);
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--md-on-secondary-container);
+      padding: 1rem 2rem;
+      border-radius: var(--radius-button);
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--color-white);
       text-align: center;
       white-space: nowrap;
       max-width: 90vw;
@@ -522,68 +709,105 @@
       text-overflow: ellipsis;
       pointer-events: none;
       opacity: 0;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
-      background: rgba(255, 229, 180, 0.98);
-      box-shadow: var(--md-elevation-4);
-      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      background: linear-gradient(135deg, var(--color-corn) 0%, var(--color-sunset) 100%);
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
     }
     .toast-playero.toast-visible {
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
     .toast-playero.toast-sale {
-      transform: translateX(-50%) translateY(-80px);
+      transform: translateX(-50%) translateY(-120px) scale(0.8);
       opacity: 0;
     }
     .toast-playero .toast-icon {
-      margin-right: 0.375rem;
-      font-size: 1.15em;
+      margin-right: 0.5rem;
+      font-size: 1.25em;
     }
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
+      .contenedor {
+        padding: 70px 1rem 2rem;
+      }
+      .nav-superior {
+        padding: 0.5rem 1rem;
+      }
+      .nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+      }
+      .contador-pregunta {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+      }
       .btn-flotante-ayuda {
-        top: 0.75rem;
-        right: 0.75rem;
+        bottom: 1rem;
+        right: 1rem;
         width: 48px;
         height: 48px;
-        font-size: 1.35rem;
+        font-size: 1.5rem;
       }
       .area-pregunta-grande {
-        margin: 0.5rem auto 1rem;
-        padding: 1.75rem 1.25rem;
+        padding: 2rem 1.25rem;
+        min-height: 220px;
+      }
+      .area-pregunta-grande h2 {
+        font-size: clamp(1.75rem, 5vw, 3rem);
       }
       .area-predicciones {
-        padding: 1.25rem;
+        padding: 1.5rem;
+      }
+      .area-predicciones h3 {
+        font-size: 1.5rem;
       }
       .equipos-inputs {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+      .input-fila-item {
+        padding: 1rem;
+      }
+      .input-pred {
+        font-size: 1.5rem;
+        padding: 0.875rem;
+      }
+      .input-prefix,
+      .input-suffix {
+        font-size: 1.25rem;
+      }
+      .input-prefix {
+        left: 0.75rem;
+      }
+      .input-suffix {
+        right: 0.75rem;
+      }
+      .input-pred.has-prefix {
+        padding-left: 2rem;
+      }
+      .input-pred.has-suffix {
+        padding-right: 2.5rem;
       }
       .btn-flotante-revelar {
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+        padding: 1.25rem 2.5rem;
+        font-size: 1.5rem;
       }
-      .btn-flotante-revelar:hover {
-        transform: translateY(-2px);
-      }
-      .btn-flotante-revelar:active {
-        transform: scale(0.97);
+      .btn-flotante-revelar .cta-icon {
+        font-size: 1.25em;
       }
       .btn-revelar-container {
-        margin: 1.5rem 0;
+        margin: 2rem auto;
       }
-      .navegacion-preguntas {
-        flex-direction: column;
-        width: 100%;
-        gap: 0.75rem;
+      .resultado-revelado {
+        padding: 2rem 1.5rem;
       }
-      .btn-nav {
-        width: 100%;
-        max-width: 280px;
+      .resultado-revelado .respuesta-correcta {
+        font-size: clamp(1.75rem, 4vw, 3rem);
       }
-      .contador-pregunta {
-        order: -1;
-        margin-bottom: 0.25rem;
+      .resultado-revelado .ganador-texto {
+        font-size: clamp(1.25rem, 3.5vw, 2.5rem);
       }
     }
   </style>
@@ -592,7 +816,6 @@
   <!-- Imagen de fondo de la playa -->
   <div id="video-background"></div>
   
-  <div id="confetti-container" aria-hidden="true"></div>
   <div id="toast-playero" class="toast-playero oculto" role="status" aria-live="polite"></div>
   
   <!-- BOTÓN FLOTANTE 🏝️ PARA CARGAR RESPUESTAS -->
@@ -611,45 +834,59 @@
     </div>
   </div>
 
+  <!-- NAVEGACIÓN SUPERIOR DISCRETA -->
+  <nav class="nav-superior">
+    <button type="button" class="nav-arrow" id="btn-pregunta-anterior" aria-label="Pregunta anterior">‹</button>
+    <span class="contador-pregunta" id="contador-pregunta">🏄 Pregunta 1</span>
+    <button type="button" class="nav-arrow" id="btn-pregunta-siguiente" aria-label="Pregunta siguiente">›</button>
+  </nav>
+
   <div class="contenedor">
-    <!-- ÁREA DE PREGUNTA GRANDE (para proyección al público) -->
+    <!-- HERO SECTION - PREGUNTA PRINCIPAL -->
     <div class="area-pregunta-grande animate__animated animate__fadeInUp">
       <h2 id="texto-pregunta">🌊 ¿Cuánto sale un choclo de la playa?</h2>
-      <div class="navegacion-preguntas">
-        <button type="button" class="btn-nav" id="btn-pregunta-anterior" aria-label="Pregunta anterior">Anterior</button>
-        <span class="contador-pregunta" id="contador-pregunta">🏄 Pregunta 1 de 36</span>
-        <button type="button" class="btn-nav" id="btn-pregunta-siguiente" aria-label="Pregunta siguiente">Siguiente</button>
-      </div>
     </div>
 
     <!-- ÁREA DE PREDICCIONES (donde los equipos ingresan) -->
     <div class="area-predicciones animate__animated animate__fadeIn">
       <h3>🏖️ Los equipos ingresan sus predicciones</h3>
       <div class="equipos-config">
-        <div class="equipos-inputs">
+        <div class="equipos-inputs" id="equipos-inputs-container">
           <div class="input-fila-item">
             <label id="label-equipo-0">Equipo 1</label>
-            <input type="text" class="input-pred" data-equipo="0" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="0" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
           <div class="input-fila-item">
             <label id="label-equipo-1">Equipo 2</label>
-            <input type="text" class="input-pred" data-equipo="1" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="1" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
           <div class="input-fila-item">
             <label id="label-equipo-2">Equipo 3</label>
-            <input type="text" class="input-pred" data-equipo="2" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="2" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
           <div class="input-fila-item">
             <label id="label-equipo-3">Equipo 4</label>
-            <input type="text" class="input-pred" data-equipo="3" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="3" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
           <div class="input-fila-item">
             <label id="label-equipo-4">Equipo 5</label>
-            <input type="text" class="input-pred" data-equipo="4" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="4" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
           <div class="input-fila-item">
             <label id="label-equipo-5">Equipo 6</label>
-            <input type="text" class="input-pred" data-equipo="5" placeholder="500" inputmode="numeric" />
+            <div class="input-wrapper">
+              <input type="text" class="input-pred" data-equipo="5" placeholder="500" inputmode="numeric" />
+            </div>
           </div>
         </div>
       </div>
@@ -753,51 +990,286 @@
     }
 
     function lanzarConfetti() {
-      const container = document.getElementById('confetti-container');
-      if (!container || typeof anime === 'undefined') return;
-      container.innerHTML = '';
-      const colores = ['#00B4D8', '#FF9F1C', '#06B6D4', '#FFE5B4', '#A7F3D0', '#FFB703', '#CAF0F8'];
-      const fragmentos = [];
-      for (let i = 0; i < 55; i++) {
-        const el = document.createElement('div');
-        el.className = 'confetti';
-        el.style.left = '50%';
-        el.style.top = '40%';
-        el.style.background = colores[Math.floor(Math.random() * colores.length)];
-        el.style.width = (6 + Math.random() * 8) + 'px';
-        el.style.height = (6 + Math.random() * 8) + 'px';
-        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        container.appendChild(el);
-        fragmentos.push(el);
+      if (typeof confetti !== 'undefined') {
+        // Usar canvas-confetti para un efecto más dramático
+        const duration = 3000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { 
+          startVelocity: 30, 
+          spread: 360, 
+          ticks: 60, 
+          zIndex: 9999,
+          colors: ['#FFD700', '#FF7E5F', '#FF6B6B', '#4facfe', '#00f2fe']
+        };
+
+        function randomInRange(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function() {
+          const timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          const particleCount = 50 * (timeLeft / duration);
+          
+          confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } 
+          }));
+          confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } 
+          }));
+        }, 250);
       }
-      fragmentos.forEach((el, i) => {
-        const ang = (Math.PI * 2 * i) / fragmentos.length + Math.random() * 2;
-        const dist = 150 + Math.random() * 200;
-        const tx = Math.cos(ang) * dist + (Math.random() - 0.5) * 100;
-        const ty = Math.sin(ang) * dist + (Math.random() - 0.5) * 100;
-        anime({
-          targets: el,
-          translateX: tx,
-          translateY: ty,
-          rotate: Math.random() * 720 - 360,
-          opacity: [1, 0],
-          duration: 1200 + Math.random() * 400,
-          delay: i * 20,
-          easing: 'easeOutQuad',
-          complete: () => el.remove()
-        });
-      });
+    }
+    
+    // Función de animación de conteo
+    function animarConteo(elemento, valorFinal, esHora, contexto = {}) {
+      const duracion = 1500; // ms
+      const pasos = 60;
+      const incremento = valorFinal / pasos;
+      let valorActual = 0;
+      let paso = 0;
+      
+      const intervalo = setInterval(() => {
+        paso++;
+        valorActual += incremento;
+        
+        if (paso >= pasos) {
+          clearInterval(intervalo);
+          valorActual = valorFinal;
+        }
+        
+        let textoResultado = '✨ Respuesta correcta: ';
+        
+        // Agregar prefijo si existe
+        if (contexto.prefix) {
+          textoResultado += contexto.prefix + ' ';
+        }
+        
+        // Agregar valor formateado
+        textoResultado += formatValor(Math.round(valorActual), esHora);
+        
+        // Agregar sufijo si existe
+        if (contexto.suffix) {
+          textoResultado += ' ' + contexto.suffix;
+        }
+        
+        elemento.textContent = textoResultado;
+        
+        // Efecto de vibración en los últimos pasos
+        if (paso >= pasos - 5) {
+          elemento.style.transform = `scale(${1 + Math.random() * 0.05})`;
+        }
+        if (paso >= pasos) {
+          elemento.style.transform = 'scale(1)';
+        }
+      }, duracion / pasos);
     }
 
+    // Detectar contexto de la pregunta para agregar prefijos/sufijos
+    function detectarContexto(textoPregunta) {
+      const texto = textoPregunta.toLowerCase();
+      
+      // Detectar prefijos (a la izquierda)
+      if (texto.includes('plata') || texto.includes('precio') || texto.includes('mercado pago') || texto.includes('sale') || texto.includes('$')) {
+        return { prefix: '$', suffix: null };
+      }
+      
+      // Detectar sufijos (a la derecha)
+      if (texto.includes('porcentaje') || texto.includes('batería') || texto.includes('%')) {
+        return { prefix: null, suffix: '%' };
+      }
+      if (texto.includes(' km') || texto.includes('kilómetros') || texto.includes('distancia')) {
+        return { prefix: null, suffix: 'km' };
+      }
+      if (texto.includes(' cm') || texto.includes('centímetros') || texto.includes('mide')) {
+        return { prefix: null, suffix: 'cm' };
+      }
+      if (texto.includes('años') && !texto.includes('cuántos')) {
+        return { prefix: null, suffix: 'años' };
+      }
+      if (texto.includes('días') && texto.includes('racha')) {
+        return { prefix: null, suffix: 'días' };
+      }
+      
+      return { prefix: null, suffix: null };
+    }
+    
+    // Extraer emoji del inicio del texto
+    function extraerEmoji(texto) {
+      const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*/u;
+      const match = texto.match(emojiRegex);
+      if (match) {
+        return {
+          emoji: match[0].trim(),
+          textoSinEmoji: texto.slice(match[0].length).trim()
+        };
+      }
+      return { emoji: '', textoSinEmoji: texto };
+    }
+    
+    // Ajustar tamaño de fuente según longitud del texto
+    function ajustarTipografia(elemento, texto) {
+      // Remover clases anteriores
+      elemento.classList.remove('text-corto', 'text-medio', 'text-largo', 'text-muy-largo');
+      
+      const longitud = texto.length;
+      
+      if (longitud < 30) {
+        elemento.classList.add('text-corto');
+      } else if (longitud < 60) {
+        elemento.classList.add('text-medio');
+      } else if (longitud < 90) {
+        elemento.classList.add('text-largo');
+      } else {
+        elemento.classList.add('text-muy-largo');
+      }
+    }
+    
+    // Formatear número con separador de miles
+    function formatearNumeroConSeparador(numero) {
+      return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
     function actualizarUI() {
       const p = PREGUNTAS[preguntaActual];
-      textoPregunta.textContent = p.texto;
+      
+      // Animar cambio de pregunta
+      textoPregunta.style.animation = 'none';
+      setTimeout(() => {
+        textoPregunta.style.animation = 'bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+      }, 10);
+      
+      // Extraer emoji y texto
+      const { emoji, textoSinEmoji } = extraerEmoji(p.texto);
+      
+      // Actualizar título con emoji destacado
+      if (emoji) {
+        textoPregunta.innerHTML = `<span class="emoji-icon">${emoji}</span>${textoSinEmoji}`;
+      } else {
+        textoPregunta.textContent = p.texto;
+      }
+      
+      // Ajustar tipografía según longitud
+      ajustarTipografia(textoPregunta, textoSinEmoji || p.texto);
+      
       contadorPregunta.textContent = `🏄 Pregunta ${preguntaActual + 1}`;
       
-      // Actualizar placeholders
-      const inputsPred = document.querySelectorAll('.input-pred');
-      inputsPred.forEach(inp => {
-        inp.placeholder = p.placeholder;
+      // Detectar contexto para prefijos/sufijos
+      const contexto = detectarContexto(p.texto);
+      
+      // Actualizar inputs según el tipo de pregunta
+      const inputWrappers = document.querySelectorAll('.input-wrapper');
+      inputWrappers.forEach((wrapper, idx) => {
+        // Limpiar wrapper
+        wrapper.innerHTML = '';
+        
+        // Crear input según tipo
+        const input = document.createElement('input');
+        input.className = 'input-pred';
+        input.dataset.equipo = idx;
+        input.placeholder = p.placeholder;
+        
+        if (p.tipo === 'hora') {
+          input.type = 'time';
+          input.step = '60'; // Intervalos de 1 minuto
+        } else {
+          input.type = 'text';
+          input.inputMode = 'numeric';
+          
+          // Agregar clase si tiene prefijo/sufijo
+          if (contexto.prefix) input.classList.add('has-prefix');
+          if (contexto.suffix) input.classList.add('has-suffix');
+        }
+        
+        // Agregar prefijo si existe
+        if (contexto.prefix) {
+          const prefix = document.createElement('span');
+          prefix.className = 'input-prefix';
+          prefix.textContent = contexto.prefix;
+          wrapper.appendChild(prefix);
+        }
+        
+        // Agregar input
+        wrapper.appendChild(input);
+        
+        // Agregar sufijo si existe
+        if (contexto.suffix) {
+          const suffix = document.createElement('span');
+          suffix.className = 'input-suffix';
+          suffix.textContent = contexto.suffix;
+          wrapper.appendChild(suffix);
+        }
+        
+        // Agregar listener para estado "listo" y formateo
+        input.addEventListener('input', (e) => {
+          const item = input.closest('.input-fila-item');
+          
+          // Actualizar estado "listo"
+          if (input.value.trim()) {
+            item.classList.add('listo');
+          } else {
+            item.classList.remove('listo');
+          }
+          
+          // Formateo automático para números (solo si no es hora)
+          if (p.tipo !== 'hora' && input.value) {
+            // Guardar posición del cursor
+            const cursorPos = input.selectionStart;
+            const valorAnterior = input.value;
+            
+            // Remover caracteres no numéricos excepto punto y coma
+            let valorLimpio = input.value.replace(/[^\d.,]/g, '');
+            
+            // Si tiene punto o coma, mantenerlo como decimal
+            if (valorLimpio.includes(',') || valorLimpio.includes('.')) {
+              // Convertir coma a punto para consistencia
+              valorLimpio = valorLimpio.replace(',', '.');
+              
+              // Asegurar solo un punto decimal
+              const partes = valorLimpio.split('.');
+              if (partes.length > 2) {
+                valorLimpio = partes[0] + '.' + partes.slice(1).join('');
+              }
+              
+              // Formatear la parte entera con separadores
+              if (partes[0]) {
+                const parteEntera = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                const parteDecimal = partes[1] !== undefined ? partes[1] : '';
+                valorLimpio = parteDecimal ? `${parteEntera},${parteDecimal}` : parteEntera;
+              }
+            } else if (valorLimpio) {
+              // Solo números enteros, agregar separadores de miles
+              valorLimpio = valorLimpio.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+            
+            // Solo actualizar si cambió
+            if (valorLimpio !== valorAnterior) {
+              input.value = valorLimpio;
+              
+              // Restaurar posición del cursor (aproximada)
+              const diferencia = valorLimpio.length - valorAnterior.length;
+              input.setSelectionRange(cursorPos + diferencia, cursorPos + diferencia);
+            }
+          }
+        });
+        
+        // Validar que solo se ingresen números (excepto en hora)
+        if (p.tipo !== 'hora') {
+          input.addEventListener('keypress', (e) => {
+            // Permitir: números, punto, coma, backspace, delete, tab
+            const char = e.key;
+            if (!/[\d.,]/.test(char) && 
+                !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+              e.preventDefault();
+            }
+          });
+        }
       });
 
       // Actualizar botones de navegación
@@ -806,6 +1278,11 @@
 
       // Ocultar resultado al cambiar de pregunta
       resultadoDiv.classList.add('oculto');
+
+      // Limpiar estados de las tarjetas
+      document.querySelectorAll('.input-fila-item').forEach(item => {
+        item.classList.remove('ganador', 'perdedor', 'listo');
+      });
 
       // Cargar predicciones si ya existen para esta pregunta
       cargarPrediccionesActuales();
@@ -817,10 +1294,13 @@
       inputsPred.forEach(inp => {
         const equipoIdx = parseInt(inp.dataset.equipo, 10);
         const valor = predicciones[equipoIdx];
+        const item = inp.closest('.input-fila-item');
         if (valor !== undefined) {
           inp.value = formatValor(valor, esPreguntaHora());
+          item.classList.add('listo');
         } else {
           inp.value = '';
+          item.classList.remove('listo');
         }
       });
     }
@@ -901,8 +1381,9 @@
     }
 
     function parseValorInput(texto, esHora) {
-      const t = String(texto || '').trim().replace(',', '.');
+      const t = String(texto || '').trim();
       if (!t) return null;
+      
       if (esHora) {
         const part = t.split(':');
         const h = parseInt(part[0], 10);
@@ -910,7 +1391,10 @@
         if (isNaN(h)) return null;
         return h * 60 + (isNaN(m) ? 0 : m);
       }
-      const n = parseFloat(t);
+      
+      // Remover separadores de miles (puntos) y convertir coma decimal a punto
+      const valorLimpio = t.replace(/\./g, '').replace(',', '.');
+      const n = parseFloat(valorLimpio);
       return isNaN(n) ? null : n;
     }
 
@@ -920,7 +1404,16 @@
         const m = Math.round(valor % 60);
         return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
       }
-      return Number.isInteger(valor) ? String(valor) : String(valor);
+      
+      // Formatear números con separador de miles
+      if (Number.isInteger(valor)) {
+        return valor.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      } else {
+        // Para decimales, formatear la parte entera
+        const partes = valor.toString().split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return partes.join(',');
+      }
     }
 
     function escapeHtml(s) {
@@ -960,7 +1453,7 @@
       const pregunta = PREGUNTAS[preguntaActual];
       const correcta = parseRespuestaCorrecta(preguntaActual, pregunta.tipo === 'hora');
       if (correcta === null) {
-        alert('No hay respuesta correcta para esta pregunta en respuestas.json. Cargá el archivo desde el botón "?".');
+        alert('No hay respuesta correcta para esta pregunta en respuestas.json. Cargá el archivo desde el botón "🏝️".');
         return;
       }
 
@@ -982,18 +1475,38 @@
       const minDist = Math.min(...distancias);
       const ganadoresIdx = equiposIdx.filter((idx, i) => distancias[i] === minDist);
 
-      // Mostrar resultado
+      // Aplicar estados visuales a las tarjetas
+      const items = document.querySelectorAll('.input-fila-item');
+      items.forEach((item, idx) => {
+        item.classList.remove('ganador', 'perdedor', 'listo');
+        if (ganadoresIdx.includes(idx)) {
+          setTimeout(() => item.classList.add('ganador'), 300);
+        } else if (predicciones[idx] !== undefined) {
+          item.classList.add('perdedor');
+        }
+      });
+
+      // Mostrar resultado con animación de conteo
       const nombreGanador = ganadoresIdx.length > 1 
         ? ganadoresIdx.map(i => equipos[i]).join(' y ') 
         : equipos[ganadoresIdx[0]];
       
-      const html = '<div class="respuesta-correcta animate__animated animate__bounceIn">✨ Respuesta correcta: ' + escapeHtml(formatValor(correcta, pregunta.tipo === 'hora')) + '</div>' +
-                   '<div class="ganador-texto animate__animated animate__tada animate__delay-1s">' + (ganadoresIdx.length > 1 ? '🎉 ¡Empate! ' : '🏆 Ganador: ') + escapeHtml(nombreGanador) + '</div>';
-      resultadoDiv.innerHTML = html;
+      // Detectar contexto para el resultado
+      const contextoResultado = detectarContexto(pregunta.texto);
+      
+      resultadoDiv.innerHTML = '<div class="respuesta-correcta">✨ Respuesta correcta: 0</div>' +
+                               '<div class="ganador-texto">' + (ganadoresIdx.length > 1 ? '🎉 ¡Empate! ' : '🏆 Ganador: ') + escapeHtml(nombreGanador) + '</div>';
       resultadoDiv.classList.remove('oculto');
+      
+      // Animar el conteo
+      const respuestaEl = resultadoDiv.querySelector('.respuesta-correcta');
+      setTimeout(() => {
+        animarConteo(respuestaEl, correcta, pregunta.tipo === 'hora', contextoResultado);
+      }, 400);
 
-      setTimeout(() => lanzarConfetti(), 350);
-      mostrarToastRevelado(nombreGanador, ganadoresIdx.length > 1);
+      // Lanzar confetti con delay
+      setTimeout(() => lanzarConfetti(), 1000);
+      setTimeout(() => mostrarToastRevelado(nombreGanador, ganadoresIdx.length > 1), 1500);
     }
 
     function mostrarToastRevelado(nombreGanador, esEmpate) {
@@ -1028,38 +1541,55 @@
     // Inicialización
     actualizarUI();
 
-    // Animaciones de entrada - Material Motion
+    // Animaciones de entrada dramáticas
     if (typeof anime !== 'undefined') {
+      anime({
+        targets: '.nav-superior',
+        opacity: [0, 1],
+        translateY: [-20, 0],
+        duration: 500,
+        easing: 'easeOutCubic'
+      });
       anime({
         targets: '.area-pregunta-grande',
         opacity: [0, 1],
-        translateY: [20, 0],
-        duration: 450,
-        easing: 'cubicBezier(0.4, 0, 0.2, 1)'
+        scale: [0.8, 1],
+        duration: 600,
+        delay: 100,
+        easing: 'easeOutBack'
       });
       anime({
         targets: '.area-predicciones',
         opacity: [0, 1],
-        scale: [0.96, 1],
+        translateY: [30, 0],
+        duration: 500,
+        delay: 200,
+        easing: 'easeOutCubic'
+      });
+      anime({
+        targets: '.input-fila-item',
+        opacity: [0, 1],
+        scale: [0.9, 1],
         duration: 400,
-        delay: 100,
-        easing: 'cubicBezier(0.4, 0, 0.2, 1)'
+        delay: anime.stagger(80, {start: 300}),
+        easing: 'easeOutBack'
       });
       anime({
         targets: '.btn-flotante-revelar',
         opacity: [0, 1],
-        scale: [0.92, 1],
-        duration: 350,
-        delay: 200,
-        easing: 'cubicBezier(0.4, 0, 0.2, 1)'
+        scale: [0.5, 1],
+        duration: 600,
+        delay: 500,
+        easing: 'easeOutElastic(1, .6)'
       });
       anime({
         targets: '.btn-flotante-ayuda',
         opacity: [0, 1],
-        scale: [0.92, 1],
-        duration: 350,
-        delay: 250,
-        easing: 'cubicBezier(0.4, 0, 0.2, 1)'
+        rotate: [180, 0],
+        scale: [0, 1],
+        duration: 500,
+        delay: 600,
+        easing: 'easeOutBack'
       });
     }
   </script>
